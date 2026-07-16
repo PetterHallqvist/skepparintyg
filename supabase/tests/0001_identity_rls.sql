@@ -48,6 +48,20 @@ begin
 end;
 $$;
 
+-- Attempts an unrestricted UPDATE and returns the affected row count. Defined
+-- here as the owner (before any role switch) — an authenticated user has no
+-- CREATE on schema public — but SECURITY INVOKER means the UPDATE inside runs
+-- as whatever role calls it, so RLS still applies to the caller.
+create or replace function test_b_update_attempt() returns int
+language plpgsql as $$
+declare v int;
+begin
+  update public.learners set display_name = 'Kapad' where true;
+  get diagnostics v = row_count;
+  return v;
+end;
+$$;
+
 -- ---------------------------------------------------------------------------
 -- User A creates a learner through the RPC
 -- ---------------------------------------------------------------------------
@@ -124,17 +138,8 @@ select is(
   'can_access_learner denies B regardless of client-sent ids'
 );
 
--- B cannot update A's learner (0 rows affected through RLS)
-create or replace function test_b_update_attempt() returns int
-language plpgsql as $$
-declare v int;
-begin
-  update public.learners set display_name = 'Kapad' where true;
-  get diagnostics v = row_count;
-  return v;
-end;
-$$;
-
+-- B cannot update A's learner (0 rows affected through RLS). The helper is
+-- defined up top as the owner; here we only call it while impersonating B.
 select is(test_b_update_attempt(), 0, 'user B cannot update A''s learner');
 
 -- ---------------------------------------------------------------------------
