@@ -23,7 +23,7 @@ assumptions — never silent code)._
 | 8   | Current NFB kunskapsfordringar/product pages for Förarintyg (source register, SPEC §3.2)         | Phase 1 content beyond samples  | open   |
 | 9   | Qualified navigation-instructor reviewer + editorial reviewer engaged                            | content `live` gate (SPEC §8.3) | open   |
 | 10  | Maritime-cartography review of generated fictional charts                                        | launch (SPEC §20.1)             | open   |
-| 11  | Original media: knot photos/illustrations, manoeuvre illustrations, licences recorded            | Phase 4                         | open   |
+| 11  | Original media: knot photos/illustrations, manoeuvre illustrations, licences recorded — M4 shipped schematic **placeholder** knot frames; replace before GA (knot status stays "teoretiskt förberedd" per §26.2) | Phase 4 shipped w/ placeholders | open   |
 | 12  | Re-verify all `official_facts` values (75 %, 90/120/60 min, ages, fees) within 14 days of launch | M9 DoD                          | open   |
 
 ## Blocking public launch (not the build)
