@@ -3,12 +3,13 @@ import { join } from "node:path";
 import { DECKS } from "@/pipeline/decks/data.mjs";
 import { toQuizletTsv } from "@/pipeline/decks/quizlet.mjs";
 import { deckMeta } from "@/lib/decks/registry";
+import { hasActiveEntitlement } from "@/lib/commerce/entitlement-check";
 
 /**
  * Deck download (SPEC §37.7). Entitlement is fail-closed: free decks download
- * now; paid decks return 403 until real entitlements land (M6). TSV is generated
- * in-memory (deterministic, no deps); the binary .apkg is served from the
- * pipeline build output — never bundled into the client.
+ * now; paid decks require an active entitlement for the deck's certification
+ * (M6). TSV is generated in-memory (deterministic, no deps); the binary .apkg
+ * is served from the pipeline build output — never bundled into the client.
  */
 export async function GET(
   req: Request,
@@ -18,11 +19,13 @@ export async function GET(
   const meta = deckMeta(id);
   if (!meta) return new Response("Kortleken finns inte.", { status: 404 });
 
-  // Fail-closed: only the free lead-magnet deck is downloadable pre-M6.
+  // Paid decks require an active entitlement covering their certification.
+  // Fail-closed: no DB / no entitlement / RPC error → 403 (see entitlement-check).
   if (meta.access !== "free") {
-    return new Response("Kräver aktivt abonnemang (kommer i M6).", {
-      status: 403,
-    });
+    const entitled = await hasActiveEntitlement(meta.certification);
+    if (!entitled) {
+      return new Response("Kräver aktivt abonnemang.", { status: 403 });
+    }
   }
 
   const format = new URL(req.url).searchParams.get("format") ?? "tsv";

@@ -9,6 +9,11 @@ export default defineConfig({
     environment: "node",
   },
   resolve: {
-    alias: { "@": path.resolve(__dirname, ".") },
+    alias: {
+      "@": path.resolve(__dirname, "."),
+      // The real `server-only` throws outside an RSC graph; stub it so
+      // server-only modules (Stripe/service clients) are unit-testable.
+      "server-only": path.resolve(__dirname, "tests/stubs/server-only.ts"),
+    },
   },
 });
