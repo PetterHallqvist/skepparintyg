@@ -11,9 +11,27 @@ export function CompassRose({ className }: { className?: string }) {
       aria-hidden="true"
       className={className}
     >
-      <circle cx="100" cy="100" r="96" stroke="currentColor" strokeWidth="0.5" />
-      <circle cx="100" cy="100" r="78" stroke="currentColor" strokeWidth="0.5" />
-      <circle cx="100" cy="100" r="8" stroke="currentColor" strokeWidth="0.75" />
+      <circle
+        cx="100"
+        cy="100"
+        r="96"
+        stroke="currentColor"
+        strokeWidth="0.5"
+      />
+      <circle
+        cx="100"
+        cy="100"
+        r="78"
+        stroke="currentColor"
+        strokeWidth="0.5"
+      />
+      <circle
+        cx="100"
+        cy="100"
+        r="8"
+        stroke="currentColor"
+        strokeWidth="0.75"
+      />
       {ticks.map((deg) => {
         const major = deg % 90 === 0;
         const mid = deg % 30 === 0;

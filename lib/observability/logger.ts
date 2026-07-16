@@ -5,7 +5,8 @@
  * input. Scrub runs on known-sensitive key names as defence in depth —
  * callers are still responsible for not passing PII.
  */
-const SENSITIVE_KEY = /(answer|token|secret|password|authorization|email|pnr|personnummer|audio)/i;
+const SENSITIVE_KEY =
+  /(answer|token|secret|password|authorization|email|pnr|personnummer|audio)/i;
 
 type LogLevel = "debug" | "info" | "warn" | "error";
 

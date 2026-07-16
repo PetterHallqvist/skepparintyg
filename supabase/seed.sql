@@ -1,0 +1,3 @@
+-- Development seed data. Applied by `supabase db reset`.
+-- Phase 1 adds certifications, sample objectives, lessons and items here.
+-- Never seed production through this file.

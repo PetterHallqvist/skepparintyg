@@ -236,15 +236,23 @@
       linear-gradient(var(--bezel-line), var(--bezel-line));
     background-repeat: no-repeat;
     background-size:
-      12px 1px, 1px 12px,
-      12px 1px, 1px 12px,
-      12px 1px, 1px 12px,
-      12px 1px, 1px 12px;
+      12px 1px,
+      1px 12px,
+      12px 1px,
+      1px 12px,
+      12px 1px,
+      1px 12px,
+      12px 1px,
+      1px 12px;
     background-position:
-      top left, top left,
-      top right, top right,
-      bottom left, bottom left,
-      bottom right, bottom right;
+      top left,
+      top left,
+      top right,
+      top right,
+      bottom left,
+      bottom left,
+      bottom right,
+      bottom right;
   }
   /* Depth-contour backdrop — concentric hairline rings, off-centre */
   .bg-contours {
