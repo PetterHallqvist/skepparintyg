@@ -14,7 +14,11 @@ import {
   type AttemptFeedback,
 } from "@/lib/learning/actions";
 import type { DemoChallenge } from "@/lib/learning/demo";
-import { ItemRenderer, type ItemResponse } from "./item-renderers";
+import {
+  ItemRenderer,
+  StimulusView,
+  type ItemResponse,
+} from "./item-renderers";
 
 type Confidence = "guessed" | "fairly_sure" | "very_sure";
 type Phase = "loading" | "answering" | "confidence" | "feedback" | "done";
@@ -147,6 +151,8 @@ export function SessionPlayer({
           <p className="text-base font-medium leading-relaxed">
             {challenge.stemSv}
           </p>
+
+          <StimulusView interaction={challenge.interaction} />
 
           <ItemRenderer
             kind={challenge.kind}
