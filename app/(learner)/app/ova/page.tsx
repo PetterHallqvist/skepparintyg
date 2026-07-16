@@ -1,14 +1,28 @@
 import type { Metadata } from "next";
-import { ComingSoon } from "@/components/learning/coming-soon";
+import { StatusChip } from "@/components/design-system/status-chip";
+import { SessionPlayer } from "@/components/learning/session-player";
+import { isSupabaseConfigured } from "@/lib/env";
+import { getDemoChallenge } from "@/lib/learning/actions";
 
 export const metadata: Metadata = { title: "Öva" };
 
-export default function OvaPage() {
+export default async function OvaPage() {
+  const initialChallenge = await getDemoChallenge(0);
   return (
-    <ComingSoon
-      title="Öva"
-      phase="fas 2"
-      description="Adaptiva studiepass: repetitioner som är på väg att glömmas, ett huvudmoment med stöd och blandade självständiga uppgifter — cirka 15–20 minuter per pass."
-    />
+    <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
+      <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">Dagens pass</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Fem blandade uppgifter. Varje svar rättas på servern och förklaras
+            steg för steg.
+          </p>
+        </div>
+        {!isSupabaseConfigured ? (
+          <StatusChip tone="warning">Demopass</StatusChip>
+        ) : null}
+      </header>
+      <SessionPlayer initialChallenge={initialChallenge} />
+    </div>
   );
 }

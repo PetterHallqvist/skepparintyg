@@ -7,16 +7,28 @@ import {
   Compass,
   GraduationCap,
   Home,
+  NotebookPen,
   UserRound,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+/** Mobile tab bar: max five primary destinations. */
 export const APP_NAV = [
   { href: "/app/start", label: "Start", icon: Home },
   { href: "/app/ova", label: "Öva", icon: GraduationCap },
   { href: "/app/sjokort", label: "Sjökort", icon: Compass },
   { href: "/app/framsteg", label: "Framsteg", icon: BarChart3 },
   { href: "/app/konto", label: "Konto", icon: UserRound },
+] as const;
+
+/** Desktop sidebar: full set. */
+const SIDEBAR_NAV = [
+  APP_NAV[0],
+  APP_NAV[1],
+  APP_NAV[2],
+  { href: "/app/felbok", label: "Felboken", icon: NotebookPen },
+  APP_NAV[3],
+  APP_NAV[4],
 ] as const;
 
 function useIsActive() {
@@ -29,7 +41,7 @@ export function AppSidebarNav() {
   const isActive = useIsActive();
   return (
     <nav aria-label="Appmeny" className="space-y-1">
-      {APP_NAV.map((item) => (
+      {SIDEBAR_NAV.map((item) => (
         <Link
           key={item.href}
           href={item.href}
