@@ -1,0 +1,208 @@
+{
+  "id": "grundviken-v1",
+  "title": "Grundviken",
+  "version": 1,
+  "svg": "/charts/grundviken-v1/chart.svg",
+  "widthPx": 1800,
+  "heightPx": 1200,
+  "coordinateSystem": {
+    "type": "fictional_geographic",
+    "originLatDeg": 58,
+    "originLatMin": 10,
+    "originLonDeg": 11,
+    "originLonMin": 20,
+    "pxPerLatMinute": 120,
+    "pxPerLonMinuteAtChart": 120,
+    "northVector": [
+      0,
+      -1
+    ]
+  },
+  "scale": {
+    "pxPerNm": 120,
+    "uniform": true
+  },
+  "compass": {
+    "variationDeg": 6,
+    "variationEpochLabel": "Fiktivt övningsvärde",
+    "deviationTable": [
+      {
+        "compassDeg": 0,
+        "deviationDeg": -3
+      },
+      {
+        "compassDeg": 45,
+        "deviationDeg": -1
+      },
+      {
+        "compassDeg": 90,
+        "deviationDeg": 2
+      },
+      {
+        "compassDeg": 135,
+        "deviationDeg": 4
+      },
+      {
+        "compassDeg": 180,
+        "deviationDeg": 3
+      },
+      {
+        "compassDeg": 225,
+        "deviationDeg": 0
+      },
+      {
+        "compassDeg": 270,
+        "deviationDeg": -2
+      },
+      {
+        "compassDeg": 315,
+        "deviationDeg": -4
+      },
+      {
+        "compassDeg": 360,
+        "deviationDeg": -3
+      }
+    ]
+  },
+  "layers": [
+    {
+      "id": "land",
+      "defaultVisible": true
+    },
+    {
+      "id": "depths",
+      "defaultVisible": true
+    },
+    {
+      "id": "marks",
+      "defaultVisible": true
+    },
+    {
+      "id": "labels",
+      "defaultVisible": true
+    }
+  ],
+  "features": [
+    {
+      "id": "fyr-norrgrund",
+      "type": "lighthouse",
+      "position": {
+        "x": 830,
+        "y": 210
+      },
+      "name": "Norrgrund",
+      "properties": {
+        "character": "Fl(2) 10s",
+        "heightM": 14
+      },
+      "hitRadiusPx": 26
+    },
+    {
+      "id": "hamn-grundviken",
+      "type": "harbour",
+      "position": {
+        "x": 350,
+        "y": 300
+      },
+      "name": "Grundviken",
+      "properties": {},
+      "hitRadiusPx": 30
+    },
+    {
+      "id": "sb-1",
+      "type": "lateral_starboard",
+      "position": {
+        "x": 600,
+        "y": 520
+      },
+      "name": "SB 1",
+      "properties": {
+        "light": "Q G"
+      },
+      "hitRadiusPx": 24
+    },
+    {
+      "id": "bb-1",
+      "type": "lateral_port",
+      "position": {
+        "x": 700,
+        "y": 430
+      },
+      "name": "BB 1",
+      "properties": {
+        "light": "Q R"
+      },
+      "hitRadiusPx": 24
+    },
+    {
+      "id": "sb-2",
+      "type": "lateral_starboard",
+      "position": {
+        "x": 960,
+        "y": 700
+      },
+      "name": "SB 2",
+      "properties": {},
+      "hitRadiusPx": 24
+    },
+    {
+      "id": "nordprick-tva-systrar",
+      "type": "cardinal_north",
+      "position": {
+        "x": 1330,
+        "y": 620
+      },
+      "name": "Två systrar",
+      "properties": {
+        "topmark": "två koner uppåt",
+        "light": "Q"
+      },
+      "hitRadiusPx": 24
+    },
+    {
+      "id": "ankarplats-ekholmen",
+      "type": "anchorage",
+      "position": {
+        "x": 1060,
+        "y": 620
+      },
+      "name": "Ekholmens ankarplats",
+      "properties": {},
+      "hitRadiusPx": 28
+    }
+  ],
+  "hazards": [
+    {
+      "id": "stengrundet",
+      "kind": "shoal",
+      "minDepthM": 1.8,
+      "polygon": [
+        {
+          "x": 1240,
+          "y": 700
+        },
+        {
+          "x": 1330,
+          "y": 660
+        },
+        {
+          "x": 1420,
+          "y": 700
+        },
+        {
+          "x": 1400,
+          "y": 790
+        },
+        {
+          "x": 1290,
+          "y": 810
+        }
+      ]
+    }
+  ],
+  "legal": {
+    "notice": "Fiktivt övningskort. Ej för navigation.",
+    "assetAuthor": "Sjöklart chart-gen (deterministisk, seed 58112026)",
+    "reviewedBy": ""
+  }
+}
