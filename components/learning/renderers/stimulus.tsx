@@ -7,6 +7,9 @@ import {
 } from "@/components/trainers/light-scene";
 import { HornPlayButton } from "@/components/trainers/horn-control";
 import { VesselScene } from "@/components/trainers/vessel-scene";
+import { KnotViewer, type KnotSpec } from "@/components/trainers/knot-viewer";
+import { WeatherCard, type WeatherSpec } from "@/components/trainers/weather-card";
+import { PlotterFrame, type PlotterSpec } from "@/components/trainers/plotter-frame";
 import type { Blast } from "@/lib/audio/horn";
 import type { Scene } from "@/lib/trainers/rules-schema";
 
@@ -38,7 +41,12 @@ export function StimulusView({
       return <HornPlayButton pattern={stimulus.pattern as Blast[]} />;
     case "vessel_scene":
       return <VesselScene scene={stimulus.scene as Scene} />;
-    // Further kinds land with their trainers (4d knots/weather/plotter).
+    case "knot_frames":
+      return <KnotViewer spec={stimulus.knot as KnotSpec} />;
+    case "weather_card":
+      return <WeatherCard spec={stimulus.weather as WeatherSpec} />;
+    case "plotter":
+      return <PlotterFrame spec={stimulus.plotter as PlotterSpec} />;
     default:
       return null;
   }

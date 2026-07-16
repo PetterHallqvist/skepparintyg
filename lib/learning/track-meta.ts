@@ -35,6 +35,27 @@ export const TRACK_META: TrackMeta[] = [
     route: "/app/ova/vajning",
     icon: "Sailboat",
   },
+  {
+    id: "knop",
+    title: "Knopar",
+    blurb: "Följ stegen, ordna dem rätt och hitta felet — råbandsknop och pålstek.",
+    route: "/app/ova/knop",
+    icon: "Anchor",
+  },
+  {
+    id: "vader",
+    title: "Väder & beslut",
+    blurb: "Tolka prognos och observation, känn igen försämring och välj försiktigt.",
+    route: "/app/ova/vader",
+    icon: "CloudSun",
+  },
+  {
+    id: "plotter",
+    title: "Elektroniskt sjökort",
+    blurb: "Overzoom, waypointinmatning, MOB och korskontroll mot sjömärken.",
+    route: "/app/ova/plotter",
+    icon: "Radar",
+  },
 ];
 
 export function trackMeta(id: string): TrackMeta | undefined {

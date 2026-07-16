@@ -3,6 +3,9 @@ import "server-only";
 import { DEMO_ITEMS, type DemoItem } from "../demo";
 import { LIGHTS_ITEMS } from "./lights";
 import { RULES_ITEMS } from "./rules";
+import { KNOP_ITEMS } from "./knop";
+import { VADER_ITEMS } from "./vader";
+import { PLOTTER_ITEMS } from "./plotter";
 
 /**
  * Practice-track registry (server-only — holds answer keys). Each trainer route
@@ -14,6 +17,9 @@ export const TRACK_ITEMS: Record<string, DemoItem[]> = {
   demo: DEMO_ITEMS,
   ljus: LIGHTS_ITEMS,
   vajning: RULES_ITEMS,
+  knop: KNOP_ITEMS,
+  vader: VADER_ITEMS,
+  plotter: PLOTTER_ITEMS,
 };
 
 export function getTrackItems(id: string): DemoItem[] {
