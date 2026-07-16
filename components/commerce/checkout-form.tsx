@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { createCheckoutSession } from "@/lib/commerce/actions";
 import { WITHDRAWAL_CONSENT_LABEL } from "@/lib/commerce/legal-copy";
+import { useAnalytics } from "@/components/consent/consent-provider";
 
 /**
  * Checkout form (SPEC §69.2). The withdrawal-right consent is an explicit,
@@ -30,9 +31,11 @@ export function CheckoutForm({
   const [consented, setConsented] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+  const { track } = useAnalytics();
 
   function submit() {
     setError(null);
+    track({ name: "checkout_started", productId });
     startTransition(async () => {
       const result = await createCheckoutSession({
         productId,

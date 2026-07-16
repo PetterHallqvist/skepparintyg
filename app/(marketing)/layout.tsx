@@ -26,7 +26,8 @@ const FOOTER_GROUPS = [
     links: [
       { href: "/gratis-kunskapstest", label: "Kunskapstest" },
       { href: "/gratis-sjokortsovning", label: "Sjökortsövning" },
-      { href: "/sa-fungerar-provet", label: "Så fungerar provet" },
+      { href: "/kunskapsbank", label: "Kunskapsbank" },
+      { href: "/ordlista", label: "Ordlista" },
     ],
   },
   {

@@ -1,7 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Logo } from "@/components/design-system/logo";
 import { StatusChip } from "@/components/design-system/status-chip";
 import { requireStaff } from "@/lib/admin/guard";
+
+// Admin studio is staff-only — never index it (SPEC M7 DoD).
+export const metadata: Metadata = { robots: { index: false, follow: false } };
 
 const ADMIN_NAV = [
   { href: "/admin", label: "Översikt" },

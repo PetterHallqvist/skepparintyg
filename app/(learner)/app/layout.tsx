@@ -1,8 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Logo } from "@/components/design-system/logo";
 import { AppSidebarNav, AppTabBar } from "@/components/learning/app-nav";
 import { isSupabaseConfigured } from "@/lib/env";
 import { BRAND } from "@/lib/brand";
+
+// The learner app holds personal study data — never index it (SPEC M7 DoD).
+export const metadata: Metadata = { robots: { index: false, follow: false } };
 
 /**
  * Learner shell — "navigation console" (instrument theme).

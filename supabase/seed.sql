@@ -32,3 +32,38 @@ select 'forarintyg-digital', 'SEK', 89500, 2500
 where not exists (
   select 1 from public.product_prices where product_id = 'forarintyg-digital'
 );
+
+-- ---------------------------------------------------------------------------
+-- Editorial (Phase 7): kunskapsbank + ordlista. Ships status='review'/'draft'
+-- with unverified-source flags (M1 policy) — an editor publishes to 'live'
+-- before anything shows on the public pages. The demo-shell fallback in
+-- lib/content/editorial.ts showcases these before a database exists.
+-- ---------------------------------------------------------------------------
+
+insert into public.articles (slug, title_sv, summary_sv, body_blocks, status, source_short, verified_at)
+values
+  ('sa-laser-du-ett-sjokort', 'Så läser du ett sjökort',
+   'Djupsiffror, sjömärken och latitudskalan — grunderna.',
+   jsonb_build_array(
+     jsonb_build_object('type','markdown','body_sv','## Vad sjökortet visar' || E'\n\n' || 'Ett sjökort visar **djup**, **grund**, **farleder** och **sjömärken**.'),
+     jsonb_build_object('type','callout','tone','info','body_sv','Mät distanser mot **latitudskalan** i kortets kant.')
+   ),
+   'review', 'Sjöklart (utkast, ej källgranskad)', '2026-07-16'),
+  ('vajningsreglerna-i-korthet', 'Väjningsreglerna i korthet',
+   'Möte, korsande och upphinnande — en översikt.',
+   jsonb_build_array(
+     jsonb_build_object('type','markdown','body_sv','## Grundprinciperna' || E'\n\n' || '- **Möte**: båda viker åt styrbord.' || E'\n' || '- **Korsande**: den som har den andra om styrbord viker.'),
+     jsonb_build_object('type','callout','tone','warning','body_sv','Alla ombord är skyldiga att undvika kollision — ta aldrig för givet att den andre väjer.')
+   ),
+   'review', 'Sjöklart (utkast, ej källgranskad)', '2026-07-16')
+on conflict (slug) do nothing;
+
+insert into public.glossary_terms (slug, term, definition_sv, see_also, source_short, verified_at, status)
+values
+  ('styrbord', 'Styrbord', 'Höger sida av båten sett föröver.', array['babord'], 'Sjöklart (utkast)', '2026-07-16', 'draft'),
+  ('babord', 'Babord', 'Vänster sida av båten sett föröver.', array['styrbord'], 'Sjöklart (utkast)', '2026-07-16', 'draft'),
+  ('knop', 'Knop', 'Fartenhet: en nautisk mil per timme.', array['nautisk-mil'], 'Sjöklart (utkast)', '2026-07-16', 'draft'),
+  ('nautisk-mil', 'Nautisk mil (M)', '1 852 meter, motsvarar en latitudminut.', array['knop'], 'Sjöklart (utkast)', '2026-07-16', 'draft'),
+  ('missvisning', 'Missvisning', 'Skillnaden mellan rättvisande och magnetisk nord.', array['deviation'], 'Sjöklart (utkast)', '2026-07-16', 'draft'),
+  ('deviation', 'Deviation', 'Kompassfel orsakat av båtens eget magnetfält.', array['missvisning'], 'Sjöklart (utkast)', '2026-07-16', 'draft')
+on conflict (slug) do nothing;
