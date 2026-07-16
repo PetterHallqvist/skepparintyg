@@ -17,7 +17,10 @@ export type DemoItem = {
   method?: string;
   sourceRef: string;
   objectiveTitle: string;
+  /** Misconception copy keyed by a wrong option key (choice kinds). */
   misconceptionByKey?: Record<string, string>;
+  /** Misconception copy keyed by a failed stage (rules_scenario). */
+  stageMisconceptionBySt?: Record<string, string>;
 };
 
 export const DEMO_ITEMS: DemoItem[] = [
@@ -119,10 +122,17 @@ export const DEMO_ITEMS: DemoItem[] = [
   },
 ];
 
-export function sanitizeDemoItem(item: DemoItem) {
+/**
+ * Strip an item to the client-safe challenge — never the answer key (§58.3).
+ * `total` is the length of the track being played.
+ */
+export function sanitizeDemoItem(
+  item: DemoItem,
+  total: number = DEMO_ITEMS.length,
+) {
   return {
     index: item.index,
-    total: DEMO_ITEMS.length,
+    total,
     kind: item.kind,
     stemSv: item.stemSv,
     interaction: item.interaction,
@@ -131,3 +141,6 @@ export function sanitizeDemoItem(item: DemoItem) {
 }
 
 export type DemoChallenge = ReturnType<typeof sanitizeDemoItem>;
+
+/** Optional per-stage misconception copy for rules_scenario feedback. */
+export type StageMisconceptions = Record<string, string>;

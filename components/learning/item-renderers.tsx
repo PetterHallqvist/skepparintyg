@@ -8,6 +8,8 @@ import {
   SingleChoice,
 } from "./renderers/basic";
 import { WaypointEntry } from "./renderers/waypoint";
+import { LightBuild } from "./renderers/light-build";
+import { SoundProduce } from "./renderers/sound-produce";
 import type { ItemResponse, ResponseWidgetProps } from "./renderers/types";
 
 /**
@@ -32,6 +34,8 @@ const REGISTRY: Record<string, (props: ResponseWidgetProps) => React.ReactNode> 
     ordering: Ordering,
     matching: Matching,
     waypoint_entry: WaypointEntry,
+    light_build: LightBuild,
+    sound_produce: SoundProduce,
   };
 
 export function ItemRenderer({

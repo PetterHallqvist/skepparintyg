@@ -1,5 +1,13 @@
 "use client";
 
+import {
+  DayShapeView,
+  LightScene,
+  type LightSceneSpec,
+} from "@/components/trainers/light-scene";
+import { HornPlayButton } from "@/components/trainers/horn-control";
+import type { Blast } from "@/lib/audio/horn";
+
 /**
  * Stimulus vs response (SPEC §24–27 architecture). Many trainer tasks pair a
  * visual/audio *stimulus* — an animated light, a vessel scene, a plotter frame,
@@ -20,8 +28,13 @@ export function StimulusView({
   if (!stimulus || typeof stimulus.kind !== "string") return null;
 
   switch (stimulus.kind) {
-    // Stimulus kinds land with their trainers (4b lights, 4c vessels, 4d
-    // knots/weather/plotter). Registered here as they arrive.
+    case "light_scene":
+      return <LightScene spec={stimulus as LightSceneSpec} />;
+    case "day_shape":
+      return <DayShapeView shape={String(stimulus.shape)} />;
+    case "sound":
+      return <HornPlayButton pattern={stimulus.pattern as Blast[]} />;
+    // Further kinds land with their trainers (4c vessels, 4d knots/weather/plotter).
     default:
       return null;
   }
