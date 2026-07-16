@@ -18,7 +18,7 @@ export const TRACK_META: TrackMeta[] = [
     id: "demo",
     title: "Dagens pass",
     blurb: "Blandade uppgifter — repetition, färdighet och felboken i ett pass.",
-    route: "/app/ova",
+    route: "/app/ova/pass",
     icon: "GraduationCap",
   },
   {

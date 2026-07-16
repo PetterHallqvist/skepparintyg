@@ -7,6 +7,7 @@ import {
   DEFAULT_WEIGHTS,
   type ReadinessComponents,
 } from "@/lib/domain/readiness";
+import { FORAR_MODULES } from "@/lib/curriculum/modules";
 import { BRAND } from "@/lib/brand";
 import { isSupabaseConfigured } from "@/lib/env";
 
@@ -140,6 +141,50 @@ export default function FramstegPage() {
           <DataReadout label="Aktiva tak" value={result.appliedCaps.length} />
           <DataReadout label="Algoritm" value="v1" hint="beredskap-v1" />
         </div>
+
+        {/* §28 — per-module breadth */}
+        <section
+          aria-labelledby="moduler"
+          className="rounded-lg border border-border bg-card p-6"
+        >
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+            <h2 id="moduler" className="text-label text-muted-foreground">
+              Måltäckning per modul (F1–F12)
+            </h2>
+            <span className="text-xs text-muted-foreground">
+              Praktiska knopmoment räknas som ”teoretiskt förberedd”
+            </span>
+          </div>
+          <ul className="grid gap-x-6 gap-y-3 sm:grid-cols-2">
+            {FORAR_MODULES.map((m) => {
+              const pct = Math.round(m.demoReadiness * 100);
+              return (
+                <li key={m.id} className="grid grid-cols-[2.5rem_1fr_2.5rem] items-center gap-3">
+                  <span className="font-readout text-xs text-muted-foreground">
+                    {m.id}
+                  </span>
+                  <div>
+                    <p className="text-sm">{m.title_sv}</p>
+                    <div
+                      role="progressbar"
+                      aria-valuenow={pct}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                      aria-label={`${m.id} ${m.title_sv}`}
+                      className="mt-1 h-1.5 overflow-hidden rounded-full bg-muted"
+                    >
+                      <div
+                        className={pct >= 60 ? "h-full bg-primary" : "h-full bg-warning"}
+                        style={{ width: `${pct}%` }}
+                      />
+                    </div>
+                  </div>
+                  <span className="font-readout text-right text-sm">{pct}</span>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
       </div>
     </div>
   );

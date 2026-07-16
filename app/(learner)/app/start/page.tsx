@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Compass, NotebookPen, Timer } from "lucide-react";
+import { ArrowRight, Compass, NotebookPen, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataReadout } from "@/components/design-system/data-readout";
@@ -38,7 +38,7 @@ export default function StartPage() {
                 uppgifter
               </p>
             </div>
-            <Button size="lg" render={<Link href="/app/ova" />}>
+            <Button size="lg" render={<Link href="/app/ova/pass" />}>
               Starta passet
               <ArrowRight aria-hidden="true" />
             </Button>
@@ -90,16 +90,16 @@ export default function StartPage() {
                     hint: "Mät distans i Grundviken",
                   },
                   {
-                    href: "/app/ova",
+                    href: "/app/ova/vajning",
                     icon: NotebookPen,
                     title: "Väjningsregler",
-                    hint: "2 av 6 scenarier kvar",
+                    hint: "2 av 8 scenarier kvar",
                   },
                   {
-                    href: "/app/framsteg",
-                    icon: Timer,
-                    title: "Träningssimulering",
-                    hint: "Lås upp vid 75 i beredskap",
+                    href: "/app/ova/repetition",
+                    icon: RefreshCw,
+                    title: "Träna på dina fel",
+                    hint: "Riktat repetitionspass från felboken",
                   },
                 ].map((row) => (
                   <Link

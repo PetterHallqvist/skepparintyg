@@ -135,3 +135,63 @@ function toPlanned(
 ): PlannedActivity {
   return { id: c.id, objectiveId: c.objectiveId, section, type: c.type };
 }
+
+// ---------------------------------------------------------------------------
+// Remediation planning (SPEC §13.6) — build a session from open felbok entries
+// ---------------------------------------------------------------------------
+
+export type FelbokEntry = {
+  id: string;
+  objectiveId: string;
+  misconceptionId: string | null;
+  status: "open" | "improving" | "resolved";
+  occurrences: number;
+};
+
+export type RemediationStep = {
+  objectiveId: string;
+  misconceptionId: string | null;
+  /** `repair` targets the misconception directly; `fresh` is an independent
+   *  item on the same objective, needed for a resolution on a separate date. */
+  mode: "repair" | "fresh";
+};
+
+const STATUS_RANK: Record<FelbokEntry["status"], number> = {
+  open: 0,
+  improving: 1,
+  resolved: 2,
+};
+
+/**
+ * Assemble a remediation session from felbok entries: misconception-grouped,
+ * one objective at a time, each repair immediately followed by a fresh
+ * independent item on the same objective. Pure and deterministic — open
+ * mistakes first, then most-repeated. Resolved entries are excluded.
+ */
+export function planRemediation(
+  entries: FelbokEntry[],
+  opts: { maxObjectives?: number } = {},
+): RemediationStep[] {
+  const max = opts.maxObjectives ?? 5;
+
+  const ranked = entries
+    .filter((e) => e.status !== "resolved")
+    .sort(
+      (a, b) =>
+        STATUS_RANK[a.status] - STATUS_RANK[b.status] ||
+        b.occurrences - a.occurrences ||
+        a.objectiveId.localeCompare(b.objectiveId),
+    );
+
+  // One repair+fresh pair per objective (highest-priority entry wins).
+  const seen = new Set<string>();
+  const steps: RemediationStep[] = [];
+  for (const e of ranked) {
+    if (seen.has(e.objectiveId)) continue;
+    if (seen.size >= max) break;
+    seen.add(e.objectiveId);
+    steps.push({ objectiveId: e.objectiveId, misconceptionId: e.misconceptionId, mode: "repair" });
+    steps.push({ objectiveId: e.objectiveId, misconceptionId: e.misconceptionId, mode: "fresh" });
+  }
+  return steps;
+}

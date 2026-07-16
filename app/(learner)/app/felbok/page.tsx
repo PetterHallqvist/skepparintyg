@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
-import { NotebookPen } from "lucide-react";
+import Link from "next/link";
+import { NotebookPen, RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { StatusChip } from "@/components/design-system/status-chip";
 import { isSupabaseConfigured } from "@/lib/env";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -36,12 +38,21 @@ export default async function FelbokPage() {
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
-      <header className="mb-6">
-        <h1 className="text-2xl font-semibold tracking-tight">Felboken</h1>
-        <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
-          Dina fel grupperade per missuppfattning — inte bara per fråga. En post
-          markeras löst först efter två självständiga rätt vid olika tillfällen.
-        </p>
+      <header className="mb-6 flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">Felboken</h1>
+          <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
+            Dina fel grupperade per missuppfattning — inte bara per fråga. En
+            post markeras löst först efter två självständiga rätt vid olika
+            tillfällen.
+          </p>
+        </div>
+        {entries.length > 0 ? (
+          <Button render={<Link href="/app/ova/repetition" />}>
+            <RefreshCw aria-hidden="true" />
+            Träna på dina fel
+          </Button>
+        ) : null}
       </header>
 
       {entries.length === 0 ? (
