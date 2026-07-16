@@ -28,6 +28,13 @@ export const TRACK_META: TrackMeta[] = [
     route: "/app/ova/ljus",
     icon: "Lightbulb",
   },
+  {
+    id: "vajning",
+    title: "Väjningsregler",
+    blurb: "Bedöm möte, korsande och upphinnande — vem viker, och vad gör du?",
+    route: "/app/ova/vajning",
+    icon: "Sailboat",
+  },
 ];
 
 export function trackMeta(id: string): TrackMeta | undefined {

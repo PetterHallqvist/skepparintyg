@@ -6,7 +6,9 @@ import {
   type LightSceneSpec,
 } from "@/components/trainers/light-scene";
 import { HornPlayButton } from "@/components/trainers/horn-control";
+import { VesselScene } from "@/components/trainers/vessel-scene";
 import type { Blast } from "@/lib/audio/horn";
+import type { Scene } from "@/lib/trainers/rules-schema";
 
 /**
  * Stimulus vs response (SPEC §24–27 architecture). Many trainer tasks pair a
@@ -34,7 +36,9 @@ export function StimulusView({
       return <DayShapeView shape={String(stimulus.shape)} />;
     case "sound":
       return <HornPlayButton pattern={stimulus.pattern as Blast[]} />;
-    // Further kinds land with their trainers (4c vessels, 4d knots/weather/plotter).
+    case "vessel_scene":
+      return <VesselScene scene={stimulus.scene as Scene} />;
+    // Further kinds land with their trainers (4d knots/weather/plotter).
     default:
       return null;
   }

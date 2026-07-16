@@ -10,6 +10,7 @@ import {
 import { WaypointEntry } from "./renderers/waypoint";
 import { LightBuild } from "./renderers/light-build";
 import { SoundProduce } from "./renderers/sound-produce";
+import { RulesScenario } from "./renderers/rules-scenario";
 import type { ItemResponse, ResponseWidgetProps } from "./renderers/types";
 
 /**
@@ -36,6 +37,7 @@ const REGISTRY: Record<string, (props: ResponseWidgetProps) => React.ReactNode> 
     waypoint_entry: WaypointEntry,
     light_build: LightBuild,
     sound_produce: SoundProduce,
+    rules_scenario: RulesScenario,
   };
 
 export function ItemRenderer({
