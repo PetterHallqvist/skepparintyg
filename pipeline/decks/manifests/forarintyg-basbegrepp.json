@@ -1,0 +1,17 @@
+{
+  "id": "forarintyg-basbegrepp",
+  "title_sv": "Förarintyg — Basbegrepp",
+  "access": "free",
+  "cardCount": 12,
+  "contentVersion": "1",
+  "files": {
+    "tsv": {
+      "name": "forarintyg-basbegrepp.tsv",
+      "sha256": "764231b6ee7a0c4d9a9ba19f1133e7cfca8926498b9aa2342ea55f7cd21ef9cd"
+    },
+    "apkg": {
+      "name": "forarintyg-basbegrepp.apkg",
+      "sha256": "e3cce7f354818b70958ca7ec97e4e615858e0278ca2e1a026a94f41f99d28536"
+    }
+  }
+}
