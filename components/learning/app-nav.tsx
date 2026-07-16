@@ -7,6 +7,7 @@ import {
   Compass,
   GraduationCap,
   Home,
+  Layers,
   NotebookPen,
   UserRound,
 } from "lucide-react";
@@ -27,6 +28,7 @@ const SIDEBAR_NAV = [
   APP_NAV[1],
   APP_NAV[2],
   { href: "/app/felbok", label: "Felboken", icon: NotebookPen },
+  { href: "/app/kortlekar", label: "Kortlekar", icon: Layers },
   APP_NAV[3],
   APP_NAV[4],
 ] as const;

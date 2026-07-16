@@ -8,13 +8,17 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { StatusChip } from "@/components/design-system/status-chip";
 import {
-  getDemoChallenge,
-  getDemoHint,
-  submitDemoAttempt,
+  getTrackChallenge,
+  getTrackHint,
+  submitTrackAttempt,
   type AttemptFeedback,
 } from "@/lib/learning/actions";
 import type { DemoChallenge } from "@/lib/learning/demo";
-import { ItemRenderer, type ItemResponse } from "./item-renderers";
+import {
+  ItemRenderer,
+  StimulusView,
+  type ItemResponse,
+} from "./item-renderers";
 
 type Confidence = "guessed" | "fairly_sure" | "very_sure";
 type Phase = "loading" | "answering" | "confidence" | "feedback" | "done";
@@ -26,9 +30,12 @@ type Phase = "loading" | "answering" | "confidence" | "feedback" | "done";
  */
 export function SessionPlayer({
   initialChallenge,
+  track = "demo",
 }: {
   initialChallenge: DemoChallenge;
+  track?: string;
 }) {
+  const total = initialChallenge.total;
   const [phase, setPhase] = useState<Phase>("answering");
   const [challenge, setChallenge] = useState<DemoChallenge | null>(
     initialChallenge,
@@ -47,7 +54,7 @@ export function SessionPlayer({
   const load = async (index: number) => {
     setPhase("loading");
     try {
-      const c = await getDemoChallenge(index);
+      const c = await getTrackChallenge(track, index);
       setChallenge(c);
       setResponse(null);
       setPendingResponse(null);
@@ -66,7 +73,8 @@ export function SessionPlayer({
     setPhase("loading");
     // eslint-disable-next-line react-hooks/purity -- event-handler context: measures active latency
     const activeLatencyMs = Date.now() - startedAt.current;
-    const fb = await submitDemoAttempt({
+    const fb = await submitTrackAttempt({
+      track,
       index: challenge.index,
       response: pendingResponse,
       confidence,
@@ -81,7 +89,7 @@ export function SessionPlayer({
   const requestHint = async () => {
     if (!challenge) return;
     const next = Math.min(hintLevel + 1, 3);
-    const h = await getDemoHint(challenge.index, next);
+    const h = await getTrackHint(track, challenge.index, next);
     setHint(h.text);
     setHintLevel(h.tier);
   };
@@ -93,7 +101,10 @@ export function SessionPlayer({
           <p className="text-label text-muted-foreground">Passet klart</p>
           <p className="font-readout text-4xl">
             {correctCount}
-            <span className="text-lg text-muted-foreground"> rätt av 5</span>
+            <span className="text-lg text-muted-foreground">
+              {" "}
+              rätt av {total}
+            </span>
           </p>
           <p className="text-sm text-muted-foreground">
             I den riktiga kursen uppdaterar varje svar din repetitionsplan, dina
@@ -147,6 +158,8 @@ export function SessionPlayer({
           <p className="text-base font-medium leading-relaxed">
             {challenge.stemSv}
           </p>
+
+          <StimulusView interaction={challenge.interaction} />
 
           <ItemRenderer
             kind={challenge.kind}

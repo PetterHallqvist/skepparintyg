@@ -1,0 +1,17 @@
+{
+  "id": "forarintyg-formler",
+  "title_sv": "Förarintyg — Formler och kursomvandling",
+  "access": "paid",
+  "cardCount": 8,
+  "contentVersion": "1",
+  "files": {
+    "tsv": {
+      "name": "forarintyg-formler.tsv",
+      "sha256": "b737d38a3c28191cd923c162e2037726cf6f711e59d747d794126cd67e1146fe"
+    },
+    "apkg": {
+      "name": "forarintyg-formler.apkg",
+      "sha256": "78e10aa4b5aa85d0c355bacdf7268889d21a4ba3455898712a900bfd679cf603"
+    }
+  }
+}

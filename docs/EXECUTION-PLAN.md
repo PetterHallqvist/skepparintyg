@@ -13,11 +13,15 @@ Built so far, all gates green (`pnpm lint · typecheck · 107 unit tests · buil
 | 1 | M1 — content backbone + admin studio + publish gates | ✅ **done** | `36b0021` |
 | 2 | M2 — core learning engine + attempts pipeline + session player | ✅ **done** | `0f25d5a` |
 | 3 | M3 — chart laboratory (generator, §20.6 math, viewport, graded tasks) | ✅ **done** | `34cc85d` |
-| 4 | M4 — trainers, dashboard breadth, deck exports | ⬜ next | — |
-| 5 | M5 — training simulations | ⬜ pending | — |
-| 6 | M6 — commerce, guardians, entitlements | ⬜ pending | — |
-| 7 | M7 — marketing site, free funnel, SEO | ⬜ pending | — |
+| 4 | M4 — trainers, dashboard breadth, deck exports | ✅ **done** | `06d7ead`…`e96ccb1` |
+| 5 | M6 — commerce, guardians, entitlements | ⬜ next | — |
+| 6 | M7 — marketing site, free funnel, SEO | ⬜ pending | — |
+| 7 | M5 — training simulations (deprioritized 2026-07-16) | ⬜ pending | — |
 | 8 | M8–M9 — beta hardening & launch ops (operator-heavy) | ⬜ pending | — |
+
+**Build order (reordered 2026-07-16):** M4 → M6 → M7 → M5 → M8. Simulations (M5)
+moved last — they depend on a large live item pool (content-gated); commerce +
+marketing unblock revenue and the free funnel first.
 
 **Runs with zero cloud infrastructure.** No database exists yet (deliberate): env vars unset → `isSupabaseConfigured` false → preview banners + demo learning loop + manifest-graded chart lab. Migrations `0001–0004` are SQL files in-repo, applied to no cloud project. Standing up a **new dedicated Supabase EU project** (or local Docker) is a parallel operator task (`docs/HUMAN_VERIFY.md` #1, #6) — **never** a shared/curevo project.
 
@@ -63,7 +67,9 @@ Deterministic seeded Grundviken generator (original fictional SVG + Zod manifest
 
 ---
 
-## Phase 4 — Trainers, dashboard breadth, exports (M4) — ⬜ next
+## Phase 4 — Trainers, dashboard breadth, exports (M4) — ✅ done
+
+**Shipped** across `06d7ead` (4a engines + 4 item kinds), `9853f8e` (4b lights/sound), `3cb85e5` (4c rules), `5fa3999` (4d knot/weather/plotter), `af93f05` (4e remediation + dashboard breadth), `e96ccb1` (4f deck exports). Architecture: a **stimulus/response split** — trainer tasks are existing/new response kinds paired with a visual/audio stimulus, all flowing through the one session player, so SRS + felbok + readiness work unchanged (zero new DB migrations; `item_kind` is unconstrained). Gates green throughout (eslint, tsc, 167 unit/property tests, next build, deck-determinism double-build); each trainer verified in the browser at desktop + 375px. Below is the original plan, all delivered:
 
 1. **Rules trainer** (§24): scenario schema, original top-down vessel rendering, 5-part grading (perception / classification / rule / action / explanation) so a lucky final answer can't hide a conceptual error, day/night variants, scrubber, keyboard + text-diagram alternatives, misconception tags.
 2. **Lights/shapes/sound trainer** (§25): semantic light engine (`NavigationLight` — colour, arc, vertical order, rhythm), blink-character driver (`Fl(2) WRG 10s`), sector rendering, day shapes, original WebAudio sound synthesis (waveform/pulse alternative, no autoplay, captions), identify + produce + flashcard modes.
