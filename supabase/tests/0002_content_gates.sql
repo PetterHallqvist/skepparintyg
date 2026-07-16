@@ -15,27 +15,31 @@ insert into public.admin_users (user_id, role) values
   ('00000000-0000-0000-0000-0000000000a1', 'admin'),
   ('00000000-0000-0000-0000-0000000000b2', 'reviewer');
 
+-- Reuse the seeded certification if present (supabase test db loads the content
+-- seed first); the gate fixtures below use their own test-scoped source and
+-- syllabus ids so they never collide with seed rows.
 insert into public.certifications (id, name_sv, short_name_sv, description_sv, active)
-values ('forarintyg', 'Förarintyg', 'Förar', 'Grundintyg', true);
+values ('forarintyg', 'Förarintyg', 'Förar', 'Grundintyg', true)
+on conflict (id) do nothing;
 
 insert into public.source_documents
   (id, source_key, title, issuer, canonical_url, retrieved_at, last_checked_at)
 values
-  ('10000000-0000-0000-0000-000000000001', 'nfb-forar-krav',
+  ('10000000-0000-0000-0000-0000000000bb', 'nfb-forar-krav',
    'NFB kunskapsfordringar Förarintyg', 'NFB', 'https://example.test/nfb',
    now(), now());
 
 insert into public.syllabus_versions
   (id, certification_id, source_document_id, name, status)
 values
-  ('20000000-0000-0000-0000-000000000001', 'forarintyg',
-   '10000000-0000-0000-0000-000000000001', 'Förar 2026', 'active');
+  ('20000000-0000-0000-0000-0000000000bb', 'forarintyg',
+   '10000000-0000-0000-0000-0000000000bb', 'Förar 2026', 'active');
 
 insert into public.objectives
   (id, syllabus_version_id, section_key, order_index, title_sv, outcome_sv,
    objective_type, criticality, status)
 values
-  ('forar.f7.std-berakning', '20000000-0000-0000-0000-000000000001', 'F7', 1,
+  ('forar.f7.std-berakning', '20000000-0000-0000-0000-0000000000bb', 'F7', 1,
    'Fart, tid, distans', 'Beräkna gångtid från distans och fart.',
    'procedure', 'important', 'active');
 
@@ -48,7 +52,7 @@ insert into public.item_versions
 values
   ('40000000-0000-0000-0000-000000000001',
    '30000000-0000-0000-0000-000000000001', 1,
-   '20000000-0000-0000-0000-000000000001',
+   '20000000-0000-0000-0000-0000000000bb',
    'Du ska gå 6,0 M i 5 knop. Hur lång blir gångtiden i minuter?',
    '{"kind":"numeric","unit":"minuter"}',
    '{"value":72,"tolerance":0}',
@@ -67,7 +71,7 @@ select throws_like(
 
 insert into public.item_sources (item_version_id, source_document_id, locator)
 values ('40000000-0000-0000-0000-000000000001',
-        '10000000-0000-0000-0000-000000000001', 'avsnitt 7');
+        '10000000-0000-0000-0000-0000000000bb', 'avsnitt 7');
 
 select throws_like(
   $$ update public.item_versions set status = 'live'
@@ -111,11 +115,11 @@ select throws_like(
 -- 6–8: source change flags objectives, opens issue, never auto-unpublishes --
 
 insert into public.objective_sources (objective_id, source_document_id, locator)
-values ('forar.f7.std-berakning', '10000000-0000-0000-0000-000000000001', 'avsnitt 7');
+values ('forar.f7.std-berakning', '10000000-0000-0000-0000-0000000000bb', 'avsnitt 7');
 
 update public.source_documents
    set content_sha256 = 'nyhash', last_checked_at = now()
- where id = '10000000-0000-0000-0000-000000000001';
+ where id = '10000000-0000-0000-0000-0000000000bb';
 
 select is(
   (select status from public.objectives where id = 'forar.f7.std-berakning'),
