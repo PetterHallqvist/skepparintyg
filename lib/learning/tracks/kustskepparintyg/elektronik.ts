@@ -98,4 +98,87 @@ export const ELEKTRONIK_ITEMS: DemoItem[] = [
     sourceRef: SOURCE,
     objectiveTitle: "Ekolod som korskontroll",
   },
+  {
+    index: 4,
+    kind: "single_choice",
+    stemSv: "Vad är radarns största styrka för en fritidsskeppare — och dess klassiska fälla?",
+    interaction: {
+      kind: "single_choice",
+      options: [
+        {
+          key: "a",
+          text_sv: "Ser trafik och land i mörker/dimma — men små träbåtar, regn och sjöeko kan dölja mål",
+        },
+        { key: "b", text_sv: "Den visar alltid allt — inga begränsningar" },
+        { key: "c", text_sv: "Den fungerar bara i dagsljus" },
+        { key: "d", text_sv: "Den ersätter utkiken helt" },
+      ],
+    },
+    answerKey: { correct: "a" },
+    explanation:
+      "Radarn är suverän i nedsatt sikt men har skuggor: svaga radarmål, sjö- och regnekon. Den kompletterar utkiken — aldrig tvärtom.",
+    sourceRef: SOURCE,
+    objectiveTitle: "Radar",
+  },
+  {
+    index: 5,
+    kind: "single_choice",
+    stemSv: "Varför syns inte alla båtar på AIS?",
+    interaction: {
+      kind: "single_choice",
+      options: [
+        {
+          key: "a",
+          text_sv: "AIS är frivilligt för fritidsbåtar och många mindre fartyg saknar eller stänger av sändare",
+        },
+        { key: "b", text_sv: "AIS visar bara båtar över 100 m" },
+        { key: "c", text_sv: "AIS fungerar inte i skärgård" },
+        { key: "d", text_sv: "Alla båtar syns alltid på AIS" },
+      ],
+    },
+    answerKey: { correct: "a" },
+    explanation:
+      "Sändningsplikten gäller yrkessjöfart (klass A). En tom AIS-bild betyder inte tomt vatten — utkik och radar täcker resten.",
+    sourceRef: SOURCE,
+    objectiveTitle: "AIS begränsningar",
+  },
+  {
+    index: 6,
+    kind: "multiple_select",
+    stemSv:
+      "Elförsörjningen viker under gång. Vilka åtgärder är rimliga för att skydda navigationsförmågan? Välj alla som stämmer.",
+    interaction: {
+      kind: "multiple_select",
+      options: [
+        { key: "a", text_sv: "Prioritera lanternor och VHF, släck komfortförbrukare" },
+        { key: "b", text_sv: "Notera position på papper innan skärmarna dör" },
+        { key: "c", text_sv: "Ha handhållen GPS/telefon med sjökortsapp som reserv" },
+        { key: "d", text_sv: "Stäng av lanternorna först — de drar mest" },
+      ],
+    },
+    answerKey: { correct: ["a", "b", "c"] },
+    explanation:
+      "Syns + hörs + vet var du är: lanternor och VHF sist av allt att offra; papperslogg och en oberoende reservkälla räddar navigationen.",
+    sourceRef: SOURCE,
+    objectiveTitle: "Elberedskap",
+  },
+  {
+    index: 7,
+    kind: "single_choice",
+    stemSv: "Vilken referensnivå anges djupen i moderna svenska sjökort mot?",
+    interaction: {
+      kind: "single_choice",
+      options: [
+        { key: "a", text_sv: "Medelvattenstånd (ungefär) — verkligt djup varierar med vattenståndet" },
+        { key: "b", text_sv: "Högsta högvatten" },
+        { key: "c", text_sv: "Kölens djupgående" },
+        { key: "d", text_sv: "Djupen är exakta i alla lägen" },
+      ],
+    },
+    answerKey: { correct: "a" },
+    explanation:
+      "Kortdjup är relativa en referensnivå (i Östersjön nära medelvattenstånd). Lågt vattenstånd kan ge betydligt mindre vatten än siffran — räkna med marginal.",
+    sourceRef: SOURCE,
+    objectiveTitle: "Djupreferens",
+  },
 ];

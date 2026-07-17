@@ -14,6 +14,7 @@ import {
   Radar,
   Radio,
   Sailboat,
+  Scale,
   Ship,
   Waves,
   Wind,
@@ -47,6 +48,7 @@ const ICONS: Record<string, LucideIcon> = {
   Ship,
   Wrench,
   Wind,
+  Scale,
 };
 
 function TrainerCard({

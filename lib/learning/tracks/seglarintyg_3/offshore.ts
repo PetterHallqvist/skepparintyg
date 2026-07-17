@@ -178,4 +178,47 @@ export const OFFSHORE_ITEMS: DemoItem[] = [
     sourceRef: SOURCE,
     objectiveTitle: "Landkontakt",
   },
+  {
+    index: 8,
+    kind: "multiple_select",
+    stemSv:
+      "Vad hör hemma i en grab bag (nödsäck) inför en överfart? Välj alla som stämmer.",
+    interaction: {
+      kind: "multiple_select",
+      options: [
+        { key: "a", text_sv: "Handhållen VHF och nödsändare (PLB/EPIRB)" },
+        { key: "b", text_sv: "Vatten, nödraketer och termofilt" },
+        { key: "c", text_sv: "Kopior av dokument + telefon i vattentätt fodral" },
+        { key: "d", text_sv: "Båtens verktygslåda" },
+      ],
+    },
+    answerKey: { correct: ["a", "b", "c"] },
+    explanation:
+      "Nödsäcken packas för livflotten: larma (VHF/nödsändare), synas (pyroteknik), överleva (vatten/värme), identifieras (dokument). Verktyg stannar ombord.",
+    sourceRef: SOURCE,
+    objectiveTitle: "Grab bag",
+  },
+  {
+    index: 9,
+    kind: "single_choice",
+    stemSv:
+      "Varför följer du en PROGNOSKEDJA (flera prognoser över tid) i stället för en enda färsk prognos före avgång?",
+    interaction: {
+      kind: "single_choice",
+      options: [
+        {
+          key: "a",
+          text_sv: "Stabilitet mellan körningar visar hur säker prognosen är — hoppar den runt är osäkerheten stor",
+        },
+        { key: "b", text_sv: "Äldre prognoser är alltid bättre" },
+        { key: "c", text_sv: "Det är bara en vana utan värde" },
+        { key: "d", text_sv: "En prognos i veckan räcker" },
+      ],
+    },
+    answerKey: { correct: "a" },
+    explanation:
+      "Prognosens FÖRÄNDRING är en osäkerhetsmätare: konvergerar körningarna kan du lita på fönstret — spretar de planerar du med större marginal.",
+    sourceRef: SOURCE,
+    objectiveTitle: "Prognoskedja",
+  },
 ];

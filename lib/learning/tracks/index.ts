@@ -9,6 +9,7 @@ import { RULES_ITEMS } from "./forarintyg/rules";
 import { KNOP_ITEMS } from "./forarintyg/knop";
 import { VADER_ITEMS } from "./forarintyg/vader";
 import { PLOTTER_ITEMS } from "./forarintyg/plotter";
+import { REGLER_ITEMS as FORAR_REGLER } from "./forarintyg/regler";
 
 import { PASS_ITEMS as KUST_PASS } from "./kustskepparintyg/pass";
 import { NAVIGATION_ITEMS as KUST_NAVIGATION } from "./kustskepparintyg/navigation";
@@ -62,6 +63,7 @@ const TRACKS: Record<CertificationId, Record<string, DemoItem[]>> = {
     knop: KNOP_ITEMS,
     vader: VADER_ITEMS,
     plotter: PLOTTER_ITEMS,
+    regler: FORAR_REGLER,
   },
   kustskepparintyg: {
     pass: KUST_PASS,

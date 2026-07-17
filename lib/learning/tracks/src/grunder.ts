@@ -189,4 +189,49 @@ export const GRUNDER_ITEMS: DemoItem[] = [
     sourceRef: SOURCE,
     objectiveTitle: "Tillstånd och regler",
   },
+  {
+    index: 8,
+    kind: "single_choice",
+    stemSv:
+      "Varför ska VHF-radion vara kopplad så att den fungerar även vid huvudströmsbortfall?",
+    interaction: {
+      kind: "single_choice",
+      options: [
+        {
+          key: "a",
+          text_sv: "Ett elfel får inte tysta din nödkommunikation — direktmatning/reservbatteri och gärna en laddad handburen",
+        },
+        { key: "b", text_sv: "Radion drar mindre ström då" },
+        { key: "c", text_sv: "Det är bara ett krav för yrkesfartyg" },
+        { key: "d", text_sv: "Radion mår bra av dubbla kablar" },
+      ],
+    },
+    answerKey: { correct: "a" },
+    explanation:
+      "Samma haveri som skapar nöden (el, brand, vatten) slår ofta ut huvudströmmen. Oberoende matning + handhållen VHF håller larmvägen öppen.",
+    sourceRef: SOURCE,
+    objectiveTitle: "Strömförsörjning",
+  },
+  {
+    index: 9,
+    kind: "single_choice",
+    stemSv: "Vilket sammanhang hör kanal 6 klassiskt till?",
+    interaction: {
+      kind: "single_choice",
+      options: [
+        {
+          key: "a",
+          text_sv: "Fartyg-till-fartyg, bl.a. samordning vid sjöräddningsinsatser (SAR)",
+        },
+        { key: "b", text_sv: "Endast hamnkontor" },
+        { key: "c", text_sv: "DSC-signalering" },
+        { key: "d", text_sv: "Väderprognoser" },
+      ],
+    },
+    answerKey: { correct: "a" },
+    explanation:
+      "Kanal 6 är den primära interskeppskanalen och används bl.a. för samordning mellan fartyg och flyg vid räddningsinsatser.",
+    sourceRef: SOURCE,
+    objectiveTitle: "Kanalkunskap",
+  },
 ];

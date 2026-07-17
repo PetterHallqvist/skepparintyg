@@ -136,4 +136,93 @@ export const PASS_ITEMS: DemoItem[] = [
     sourceRef: SOURCE,
     objectiveTitle: "Sjökort och publikationer",
   },
+  {
+    index: 6,
+    kind: "single_choice",
+    stemSv:
+      "En besättningsmedlem har legat i 10-gradigt vatten i 20 minuter och skakar kraftigt. Vad är rätt omhändertagande?",
+    interaction: {
+      kind: "single_choice",
+      options: [
+        {
+          key: "a",
+          text_sv: "Varsamt av med vått, varma torra lager, värm långsamt — undvik snabb uppvärmning och muskelaktivitet",
+        },
+        { key: "b", text_sv: "Hett bad omedelbart" },
+        { key: "c", text_sv: "Låt personen springa runt för att bli varm" },
+        { key: "d", text_sv: "Ge kall dryck" },
+      ],
+    },
+    answerKey: { correct: "a" },
+    explanation:
+      "Hypotermi hanteras varsamt: skydda mot fortsatt avkylning, isolera, värm gradvis (kroppskontakt/filtar) — abrupt värme eller ansträngning kan utlösa cirkulationskollaps.",
+    sourceRef: SOURCE,
+    objectiveTitle: "Sjukvård — nedkylning",
+  },
+  {
+    index: 7,
+    kind: "matching",
+    stemSv: "Para ihop det nautiska hjälpmedlet med vad det mäter/visar.",
+    interaction: {
+      kind: "matching",
+      left: [
+        { key: "l1", text_sv: "Logg" },
+        { key: "l2", text_sv: "Ekolod" },
+        { key: "l3", text_sv: "AIS" },
+      ],
+      right: [
+        { key: "r1", text_sv: "Fart och distans genom vattnet" },
+        { key: "r2", text_sv: "Vattendjupet under givaren" },
+        { key: "r3", text_sv: "Andra fartygs identitet, kurs och fart via radio" },
+      ],
+    },
+    answerKey: { pairs: { l1: "r1", l2: "r2", l3: "r3" } },
+    explanation:
+      "Loggen ger fart genom vattnet (jämför mot GPS:ens fart över grund = strömmens verkan), ekolodet djup, AIS trafikbilden.",
+    sourceRef: SOURCE,
+    objectiveTitle: "Nautiska hjälpmedel",
+  },
+  {
+    index: 8,
+    kind: "single_choice",
+    stemSv:
+      "Skillnaden mellan loggens fart (genom vattnet) och GPS:ens fart (över grund) är 1,2 knop. Vad berättar det?",
+    interaction: {
+      kind: "single_choice",
+      options: [
+        { key: "a", text_sv: "Strömmens fartkomponent längs din kurs är cirka 1,2 knop" },
+        { key: "b", text_sv: "Loggen är trasig" },
+        { key: "c", text_sv: "GPS:en har tappat satelliter" },
+        { key: "d", text_sv: "Ingenting — de mäter samma sak" },
+      ],
+    },
+    answerKey: { correct: "a" },
+    explanation:
+      "Vatten- respektive grundreferens: differensen är strömmens verkan i kursens riktning — ett gratis ströminstrument du alltid bär med dig.",
+    sourceRef: SOURCE,
+    objectiveTitle: "Logg mot GPS",
+  },
+  {
+    index: 9,
+    kind: "single_choice",
+    stemSv:
+      "Du är befälhavare på en längre kusttur med besättning. Vad kräver sjölagens sjövärdighetsansvar i praktiken FÖRE avgång?",
+    interaction: {
+      kind: "single_choice",
+      options: [
+        {
+          key: "a",
+          text_sv: "Att båt, utrustning, bemanning och planering är i skick för den avsedda resan",
+        },
+        { key: "b", text_sv: "Endast att båten är försäkrad" },
+        { key: "c", text_sv: "Att alla ombord har intyg" },
+        { key: "d", text_sv: "Inget särskilt för fritidsbåtar" },
+      ],
+    },
+    answerKey: { correct: "a" },
+    explanation:
+      "Sjövärdighet är relativ resan: skrov, maskin, säkerhetsutrustning, besättningens förmåga och en plan som matchar väder och vatten.",
+    sourceRef: SOURCE,
+    objectiveTitle: "Sjölag och sjövärdighet",
+  },
 ];

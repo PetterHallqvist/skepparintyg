@@ -186,4 +186,45 @@ export const MANOVRERING_ITEMS: DemoItem[] = [
       c: "Hopp från båt är en klassisk skadeorsak — vänta in kajen.",
     },
   },
+  {
+    index: 8,
+    kind: "single_choice",
+    stemSv: "Vilken knop använder du för att göra fast förtöjningen i en ring på kajen?",
+    interaction: {
+      kind: "single_choice",
+      options: [
+        { key: "a", text_sv: "Dubbelt halvslag om egen part (eller pålstek)" },
+        { key: "b", text_sv: "Råbandsknop" },
+        { key: "c", text_sv: "Käringknut" },
+        { key: "d", text_sv: "Ingen knop — linda bara många varv" },
+      ],
+    },
+    answerKey: { correct: "a" },
+    explanation:
+      "Dubbelt halvslag om egen part håller, är justerbart och går att lossa under last. Råband är en sammanbindningsknop — inte en fästknop.",
+    sourceRef: SOURCE,
+    objectiveTitle: "Knopar i praktiken",
+    misconceptionByKey: {
+      b: "Råbandsknopen kan kapsejsa under ryckande last — fel verktyg för förtöjning.",
+    },
+  },
+  {
+    index: 9,
+    kind: "ordering",
+    stemSv: "Ordna losskastningen från kaj i pålandsvind (vind mot kajen), med spring.",
+    interaction: {
+      kind: "ordering",
+      items: [
+        { key: "a", text_sv: "Genomgång: ordning, roller och fendrar på plats" },
+        { key: "b", text_sv: "Loss alla utom förspringet (lagt på slip)" },
+        { key: "c", text_sv: "Motor fram mot springet — aktern arbetar ut från kajen" },
+        { key: "d", text_sv: "Hem med springet och back ut när aktern pekar fritt" },
+      ],
+    },
+    answerKey: { order: ["a", "b", "c", "d"] },
+    explanation:
+      "Springet + motorkraft vippar ut aktern trots att vinden trycker på; slipen gör att sista linan lossas inifrån båten.",
+    sourceRef: SOURCE,
+    objectiveTitle: "Losskastning",
+  },
 ];

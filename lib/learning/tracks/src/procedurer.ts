@@ -178,4 +178,71 @@ export const PROCEDURER_ITEMS: DemoItem[] = [
     sourceRef: SOURCE,
     objectiveTitle: "Taldisciplin",
   },
+  {
+    index: 8,
+    kind: "single_choice",
+    stemSv: "Hur gör du en korrekt kontroll av att radion sänder (radio check)?",
+    interaction: {
+      kind: "single_choice",
+      options: [
+        {
+          key: "a",
+          text_sv: "Anropa en känd station på en arbetskanal och be om läsbarhetsbesked — inte på kanal 16 i onödan",
+        },
+        { key: "b", text_sv: "Tryck sändknappen och lyssna på bruset" },
+        { key: "c", text_sv: "Sänd MAYDAY och se om någon svarar" },
+        { key: "d", text_sv: "Radio check är förbjudet" },
+      ],
+    },
+    answerKey: { correct: "a" },
+    explanation:
+      "En riktig kontroll kräver en motstation som rapporterar styrka/läsbarhet. Testtrafik ska inte belasta nödkanalen — och MAYDAY används ALDRIG som test.",
+    sourceRef: SOURCE,
+    objectiveTitle: "Radiokontroll",
+    misconceptionByKey: {
+      c: "Falskt nödanrop är straffbart och binder räddningsresurser.",
+    },
+  },
+  {
+    index: 9,
+    kind: "matching",
+    stemSv: "Para ihop läsbarhetsbeskedet med innebörden.",
+    interaction: {
+      kind: "matching",
+      left: [
+        { key: "l1", text_sv: "”LOUD AND CLEAR”" },
+        { key: "l2", text_sv: "”READABLE BUT WEAK”" },
+        { key: "l3", text_sv: "”UNREADABLE”" },
+      ],
+      right: [
+        { key: "r1", text_sv: "Stark och fullt läsbar signal" },
+        { key: "r2", text_sv: "Svag men förståelig — överväg högre effekt/närmare" },
+        { key: "r3", text_sv: "Går ej att uppfatta — byt kanal/läge eller försök igen" },
+      ],
+    },
+    answerKey: { pairs: { l1: "r1", l2: "r2", l3: "r3" } },
+    explanation:
+      "Standardiserade läsbarhetsbesked gör radiokontrollen meningsfull för båda parter.",
+    sourceRef: SOURCE,
+    objectiveTitle: "Läsbarhetsbesked",
+  },
+  {
+    index: 10,
+    kind: "single_choice",
+    stemSv: "Vad svarar du för att bekräfta att du uppfattat ett meddelande?",
+    interaction: {
+      kind: "single_choice",
+      options: [
+        { key: "a", text_sv: "”UPPFATTAT” (ROGER/RECEIVED)" },
+        { key: "b", text_sv: "”JA JA”" },
+        { key: "c", text_sv: "”OVER AND OUT”" },
+        { key: "d", text_sv: "Ingenting — tystnad betyder mottaget" },
+      ],
+    },
+    answerKey: { correct: "a" },
+    explanation:
+      "UPPFATTAT/ROGER kvitterar mottagning. Tystnad är radions farligaste svar — sändaren vet inte om något nådde fram.",
+    sourceRef: SOURCE,
+    objectiveTitle: "Kvittens",
+  },
 ];

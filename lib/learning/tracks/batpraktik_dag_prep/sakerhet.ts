@@ -177,4 +177,49 @@ export const SAKERHET_ITEMS: DemoItem[] = [
     sourceRef: SOURCE,
     objectiveTitle: "Kontroller före avgång",
   },
+  {
+    index: 8,
+    kind: "single_choice",
+    stemSv: "När är en brandfilt bättre än pulversläckaren ombord?",
+    interaction: {
+      kind: "single_choice",
+      options: [
+        {
+          key: "a",
+          text_sv: "Vid mindre bränder i pentryt (kastrull/spritkök) och brinnande kläder — kväver utan att förstöra allt",
+        },
+        { key: "b", text_sv: "Vid motorrumsbrand" },
+        { key: "c", text_sv: "Aldrig — pulver är alltid bäst" },
+        { key: "d", text_sv: "Vid elbrand i instrumentpanelen" },
+      ],
+    },
+    answerKey: { correct: "a" },
+    explanation:
+      "Filten kväver små bränder vid källan utan pulvrets sanering. Motorrum släcks utan att luckan öppnas (släckport/gasol- eller pulversystem).",
+    sourceRef: SOURCE,
+    objectiveTitle: "Brandredskap",
+  },
+  {
+    index: 9,
+    kind: "single_choice",
+    stemSv:
+      "Före avgång kontrollerar ni kommunikationen. Vad hör till en rimlig rutin?",
+    interaction: {
+      kind: "single_choice",
+      options: [
+        {
+          key: "a",
+          text_sv: "Mobil laddad i vattentätt fodral + VHF-funktionskontroll om sådan finns ombord",
+        },
+        { key: "b", text_sv: "Det räcker att någon i land har telefon" },
+        { key: "c", text_sv: "Kommunikation behövs bara till havs" },
+        { key: "d", text_sv: "Brevduva" },
+      ],
+    },
+    answerKey: { correct: "a" },
+    explanation:
+      "En våt telefon är ingen telefon: vattentätt fodral med rem, laddad, och VHF:n provad. Larmvägen ska fungera när du är blöt och stressad.",
+    sourceRef: SOURCE,
+    objectiveTitle: "Kommunikationsberedskap",
+  },
 ];

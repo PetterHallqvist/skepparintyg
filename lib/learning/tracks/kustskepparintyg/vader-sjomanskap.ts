@@ -146,4 +146,47 @@ export const VADER_SJOMANSKAP_ITEMS: DemoItem[] = [
     sourceRef: SOURCE,
     objectiveTitle: "Bränsleplanering",
   },
+  {
+    index: 6,
+    kind: "single_choice",
+    stemSv:
+      "Vad är kallvattenchock (köldchock) och varför dödar den före nedkylningen?",
+    interaction: {
+      kind: "single_choice",
+      options: [
+        {
+          key: "a",
+          text_sv: "Reflexmässig gasping och panikandning första minuterna i kallt vatten — flytväst och att flyta stilla räddar",
+        },
+        { key: "b", text_sv: "Ett tillstånd som uppstår först efter en timme" },
+        { key: "c", text_sv: "En myt — kallt vatten är bara obehagligt" },
+        { key: "d", text_sv: "Det drabbar bara icke-simkunniga" },
+      ],
+    },
+    answerKey: { correct: "a" },
+    explanation:
+      "Första 1–3 minuterna är farligast: kippandning kan dra ner vatten i luftvägarna. Flytväst håller huvudet uppe medan reflexen klingar av — ligg stilla, andas kontrollerat.",
+    sourceRef: SOURCE,
+    objectiveTitle: "Sjukvård — kallvattenchock",
+  },
+  {
+    index: 7,
+    kind: "ordering",
+    stemSv:
+      "En person ombord blir plötsligt medvetslös men andas. Ordna åtgärderna under gång.",
+    interaction: {
+      kind: "ordering",
+      items: [
+        { key: "a", text_sv: "Kontrollera andning och lägg i stabilt sidoläge" },
+        { key: "b", text_sv: "Larma — VHF kanal 16 / 112, begär medicinsk hjälp (PAN-PAN)" },
+        { key: "c", text_sv: "Håll personen varm och övervaka andningen kontinuerligt" },
+        { key: "d", text_sv: "Planera om: kortaste säkra väg mot möte med sjukvård" },
+      ],
+    },
+    answerKey: { order: ["a", "b", "c", "d"] },
+    explanation:
+      "Fria luftvägar först, sedan larm — sjöräddningen kan möta eller helikoptra. Övervakning och värme tills hjälpen tar över.",
+    sourceRef: SOURCE,
+    objectiveTitle: "Sjukvård — medvetslöshet",
+  },
 ];

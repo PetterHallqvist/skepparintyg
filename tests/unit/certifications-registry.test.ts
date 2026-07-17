@@ -72,9 +72,13 @@ describe("certification registry", () => {
         (n, t) => n + (getTrackItems(cert, t.id)?.length ?? 0),
         0,
       );
-    expect(total("forarintyg")).toBeGreaterThanOrEqual(35);
-    for (const id of CERTIFICATION_IDS.filter((c) => c !== "forarintyg")) {
-      expect(total(id), id).toBeGreaterThanOrEqual(28);
+    expect(total("forarintyg")).toBeGreaterThanOrEqual(55);
+    expect(total("kustskepparintyg")).toBeGreaterThanOrEqual(38);
+    expect(total("src")).toBeGreaterThanOrEqual(38);
+    for (const id of CERTIFICATION_IDS.filter(
+      (c) => c !== "forarintyg" && c !== "kustskepparintyg" && c !== "src",
+    )) {
+      expect(total(id), id).toBeGreaterThanOrEqual(30);
     }
   });
 

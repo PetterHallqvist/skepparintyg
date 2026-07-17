@@ -185,4 +185,52 @@ export const SJOVETT_ITEMS: DemoItem[] = [
     sourceRef: SOURCE,
     objectiveTitle: "Turplanering",
   },
+  {
+    index: 8,
+    kind: "single_choice",
+    stemSv:
+      "Du seglar i en trång farled och ett lastfartyg kommer emot. Gäller ditt segelföreträde?",
+    interaction: {
+      kind: "single_choice",
+      options: [
+        {
+          key: "a",
+          text_sv: "Nej — segelfartyg får inte hindra fartyg som är hänvisade till farleden (Regel 9)",
+        },
+        { key: "b", text_sv: "Ja — segel går alltid först" },
+        { key: "c", text_sv: "Bara om du seglar fortare än fartyget" },
+        { key: "d", text_sv: "Farleder gäller inte segelbåtar" },
+      ],
+    },
+    answerKey: { correct: "a" },
+    explanation:
+      "Regel 9 bryter segelprivilegiet: den som är beroende av ledens djup och bredd får inte hindras. Håll dig i kanten eller utanför.",
+    sourceRef: SOURCE,
+    objectiveTitle: "Segel i farled",
+    misconceptionByKey: {
+      b: "”Segel före motor” har flera undantag — trång farled är det viktigaste.",
+    },
+  },
+  {
+    index: 9,
+    kind: "single_choice",
+    stemSv: "När krängande jolle- eller kölbåtssegling — vad gäller flytplagg?",
+    interaction: {
+      kind: "single_choice",
+      options: [
+        {
+          key: "a",
+          text_sv: "Flytväst på alla, alltid — segling innebär ständig fallrisk vid manövrar och byar",
+        },
+        { key: "b", text_sv: "Bara vid kappsegling" },
+        { key: "c", text_sv: "Bara för den som sitter i lä" },
+        { key: "d", text_sv: "Aldrig — västen fastnar i tampar" },
+      ],
+    },
+    answerKey: { correct: "a" },
+    explanation:
+      "En bom i huvudet eller en plötslig kränghet ger ingen förvarning. Modern seglarväst är skuren för rörlighet — ursäkterna är slut.",
+    sourceRef: SOURCE,
+    objectiveTitle: "Flytväst under segel",
+  },
 ];

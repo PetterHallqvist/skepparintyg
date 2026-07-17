@@ -188,4 +188,109 @@ export const NOD_ITEMS: DemoItem[] = [
     sourceRef: SOURCE,
     objectiveTitle: "Nödmeddelandets innehåll",
   },
+  {
+    index: 8,
+    kind: "single_choice",
+    stemSv: "Vad betyder ”SEELONCE MAYDAY” när du hör det på kanal 16?",
+    interaction: {
+      kind: "single_choice",
+      options: [
+        {
+          key: "a",
+          text_sv: "Ledande station kräver radiotystnad på kanalen — endast nödtrafiken får sända",
+        },
+        { key: "b", text_sv: "Nöden är över" },
+        { key: "c", text_sv: "Ett test pågår" },
+        { key: "d", text_sv: "Kanalbyte till 70" },
+      ],
+    },
+    answerKey: { correct: "a" },
+    explanation:
+      "SEELONCE MAYDAY (från franskans silence) beordrar tystnad under pågående nödtrafik. Bryter någon ändå kan de avvisas med samma fras.",
+    sourceRef: SOURCE,
+    objectiveTitle: "Radiotystnad",
+  },
+  {
+    index: 9,
+    kind: "single_choice",
+    stemSv: "Vilken fras hävde radiotystnaden när nödtrafiken är helt avslutad?",
+    interaction: {
+      kind: "single_choice",
+      options: [
+        { key: "a", text_sv: "”SEELONCE FEENEE”" },
+        { key: "b", text_sv: "”MAYDAY SLUT”" },
+        { key: "c", text_sv: "”ALL CLEAR”" },
+        { key: "d", text_sv: "”KLART SLUT”" },
+      ],
+    },
+    answerKey: { correct: "a" },
+    explanation:
+      "SEELONCE FEENEE (silence fini) sänds av ledande station när nödtrafiken avslutats — normal trafik får återupptas.",
+    sourceRef: SOURCE,
+    objectiveTitle: "Radiotystnad hävs",
+  },
+  {
+    index: 10,
+    kind: "ordering",
+    stemSv: "Du hör ett MAYDAY som INGEN annan besvarar. Ordna dina åtgärder.",
+    interaction: {
+      kind: "ordering",
+      items: [
+        { key: "a", text_sv: "Skriv ner position och innehåll medan du lyssnar" },
+        { key: "b", text_sv: "Vänta en kort stund — ge kustradio/fartyg chans att kvittera" },
+        { key: "c", text_sv: "Kvittera själv: ”MAYDAY [den nödställda] DETTA ÄR [du], RECEIVED MAYDAY”" },
+        { key: "d", text_sv: "Sänd MAYDAY RELAY till kustradiostation och bistå om möjligt" },
+      ],
+    },
+    answerKey: { order: ["a", "b", "c", "d"] },
+    explanation:
+      "Anteckna direkt, ge proffsen företräde, kvittera sedan själv — och för nöden vidare med MAYDAY RELAY samtidigt som du överväger egen hjälp.",
+    sourceRef: SOURCE,
+    objectiveTitle: "Kvittens av nödanrop",
+  },
+  {
+    index: 11,
+    kind: "single_choice",
+    stemSv:
+      "En ombordvarande har fått svåra bröstsmärtor — ni behöver läkarråd men är inte i sjönöd. Hur anropar du?",
+    interaction: {
+      kind: "single_choice",
+      options: [
+        {
+          key: "a",
+          text_sv: "PAN-PAN till kustradiostationen och begär medicinsk rådgivning (radio medical)",
+        },
+        { key: "b", text_sv: "MAYDAY — allt medicinskt är nöd" },
+        { key: "c", text_sv: "SÉCURITÉ på kanal 16" },
+        { key: "d", text_sv: "Ring växeln till närmaste vårdcentral" },
+      ],
+    },
+    answerKey: { correct: "a" },
+    explanation:
+      "Brådskande men inte omedelbar livsfara = PAN-PAN. Via kustradion kopplas du till sjukvårdsrådgivning; förvärras läget uppgraderas till MAYDAY.",
+    sourceRef: SOURCE,
+    objectiveTitle: "Medicinsk il-trafik",
+  },
+  {
+    index: 12,
+    kind: "single_choice",
+    stemSv: "Varför måste en EPIRB registreras hos myndigheten?",
+    interaction: {
+      kind: "single_choice",
+      options: [
+        {
+          key: "a",
+          text_sv: "Larmet slår upp dina båt- och kontaktuppgifter — räddningen kan verifiera och agera snabbare",
+        },
+        { key: "b", text_sv: "Annars fungerar inte satellitsändaren tekniskt" },
+        { key: "c", text_sv: "Det är bara en avgiftsfråga" },
+        { key: "d", text_sv: "Registrering behövs inte" },
+      ],
+    },
+    answerKey: { correct: "a" },
+    explanation:
+      "En registrerad EPIRB kopplar 406 MHz-larmet till båt, ägare och landkontakter — falska larm kan avskrivas på minuter och verkliga får rätt respons.",
+    sourceRef: SOURCE,
+    objectiveTitle: "EPIRB-registrering",
+  },
 ];

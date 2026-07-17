@@ -181,4 +181,42 @@ export const BATSYSTEM_ITEMS: DemoItem[] = [
     sourceRef: SOURCE,
     objectiveTitle: "Reservdelar ombord",
   },
+  {
+    index: 8,
+    kind: "single_choice",
+    stemSv: "Vilka säkerhetsregler gäller för gasol ombord?",
+    interaction: {
+      kind: "single_choice",
+      options: [
+        {
+          key: "a",
+          text_sv: "Flaska i dränerat utrymme, avstängningsventil används, läckagetest regelbundet — gasol är tyngre än luft",
+        },
+        { key: "b", text_sv: "Gasolflaskan förvaras i kölsvinet där det är svalt" },
+        { key: "c", text_sv: "Gasol kräver inga särskilda rutiner" },
+        { key: "d", text_sv: "Huvudkranen ska alltid stå öppen" },
+      ],
+    },
+    answerKey: { correct: "a" },
+    explanation:
+      "Gasol sjunker och samlas i kölsvinet — flaskan står i box med dränering överbord, kranen stängs efter användning och systemet läcktestas.",
+    sourceRef: SOURCE,
+    objectiveTitle: "Gasolsäkerhet",
+    misconceptionByKey: {
+      b: "Kölsvinet är den farligaste platsen — läckande gas samlas just där.",
+    },
+  },
+  {
+    index: 9,
+    kind: "numeric",
+    stemSv:
+      "Kylbox (2,5 A), lanternor (1 A) och instrument (0,5 A) går i 10 timmar under natten. Hur många amperetimmar (Ah) förbrukas?",
+    interaction: { kind: "numeric", unit: "Ah" },
+    answerKey: { value: 40, tolerance: 0 },
+    explanation:
+      "Summa ström 4 A × 10 h = 40 Ah — nära halva kapaciteten på ett typiskt 100 Ah-batteri (som inte bör tömmas under ~50 %).",
+    method: "1. 2,5 + 1 + 0,5 = 4 A.\n2. 4 A × 10 h = 40 Ah.",
+    sourceRef: SOURCE,
+    objectiveTitle: "Energibudget",
+  },
 ];

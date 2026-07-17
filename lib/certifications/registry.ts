@@ -157,6 +157,12 @@ export const CERTIFICATIONS: Record<CertificationId, CertificationDef> = {
         blurb: "Overzoom, waypointinmatning, MOB och korskontroll mot sjömärken.",
         icon: "Radar",
       },
+      {
+        id: "regler",
+        title: "Regler & sjölag",
+        blurb: "Sjölagen, sjöfylleri, fartregler, miljö och befälhavarens ansvar.",
+        icon: "Scale",
+      },
     ],
     chartLab: true,
     marketingPath: "/forarintyg",

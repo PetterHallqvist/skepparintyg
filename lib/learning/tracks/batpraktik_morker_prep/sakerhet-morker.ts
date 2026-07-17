@@ -183,4 +183,47 @@ export const SAKERHET_MORKER_ITEMS: DemoItem[] = [
     sourceRef: SOURCE,
     objectiveTitle: "Trötthet och beslut",
   },
+  {
+    index: 8,
+    kind: "multiple_select",
+    stemSv:
+      "Vad kontrollerar du EXTRA före en mörkertur, utöver dagens vanliga kontroller? Välj alla som stämmer.",
+    interaction: {
+      kind: "multiple_select",
+      options: [
+        { key: "a", text_sv: "Att alla lanternor lyser och är rena" },
+        { key: "b", text_sv: "Ficklampor/pannlampor med laddade batterier" },
+        { key: "c", text_sv: "Instrumentbelysningens dämpning" },
+        { key: "d", text_sv: "Att solskyddet är nedfällt" },
+      ],
+    },
+    answerKey: { correct: ["a", "b", "c"] },
+    explanation:
+      "Syns (lanternor), se (arbetsljus) och behåll mörkerseendet (dämpade instrument) — tre kontroller som bara mörkret kräver.",
+    sourceRef: SOURCE,
+    objectiveTitle: "Mörkerkontroller",
+  },
+  {
+    index: 9,
+    kind: "single_choice",
+    stemSv:
+      "Hur kommunicerar besättningen effektivt i mörker när ansiktsuttryck och gester inte syns?",
+    interaction: {
+      kind: "single_choice",
+      options: [
+        {
+          key: "a",
+          text_sv: "Korta, tydliga talade besked med bekräftelse tillbaka — inga tysta antaganden",
+        },
+        { key: "b", text_sv: "Ficklampssignaler mot varandras ansikten" },
+        { key: "c", text_sv: "Man kommunicerar inte i mörker" },
+        { key: "d", text_sv: "Visselpipa för alla besked" },
+      ],
+    },
+    answerKey: { correct: "a" },
+    explanation:
+      "I mörker ersätter rösten ögonkontakten: säg vad du gör (”loss förtampen — klart!”) och kräv kvittens, precis som på radion.",
+    sourceRef: SOURCE,
+    objectiveTitle: "Kommunikation i mörker",
+  },
 ];
