@@ -39,8 +39,11 @@ insert into auth.users (id, email) values
   ('00000000-0000-0000-0000-0000000000f2', 'stranger@test'),
   ('00000000-0000-0000-0000-0000000000f3', 'guardian2@test');
 
+-- Reuse the seeded certification if present (supabase test db loads the
+-- content seed first, same idiom as 0002/0003).
 insert into public.certifications (id, name_sv, short_name_sv, description_sv, active)
-  values ('forarintyg', 'Förarintyg', 'Förar', 'd', true);
+  values ('forarintyg', 'Förarintyg', 'Förar', 'd', true)
+  on conflict (id) do nothing;
 insert into public.products (id, name_sv, description_sv, certification_id, access_months, seat_count, status)
   values ('p1', 'Digital', 'd', 'forarintyg', 12, 1, 'active');
 insert into public.product_prices (product_id, amount_ore_inc_vat, vat_rate_basis_points)
