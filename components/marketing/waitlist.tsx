@@ -1,14 +1,18 @@
-import { Compass } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, Compass } from "lucide-react";
 import { PageShell } from "@/components/design-system/page-shell";
 import { SectionHeading } from "@/components/design-system/section-heading";
 import { StatusChip } from "@/components/design-system/status-chip";
 import { DisclaimerBlock } from "@/components/design-system/disclaimer-block";
 import { LeadCaptureForm } from "@/components/marketing/lead-capture-form";
 import { BRAND } from "@/lib/brand";
+import type { CertificationId } from "@/lib/certifications/registry";
 
 /**
  * Waitlist page for a not-yet-available certificate (SPEC §11.1). Copy must NOT
  * imply the content exists — "Planerad" chip + explicit "inte tillgänglig ännu".
+ * When a preview question pool exists, the free test is linked with honest
+ * förhandsversion framing.
  */
 export function WaitlistPage({
   certId,
@@ -16,12 +20,15 @@ export function WaitlistPage({
   tagline,
   covers,
   prerequisite,
+  freeTestCertId,
 }: {
   certId: string;
   title: string;
   tagline: string;
   covers: string[];
   prerequisite?: string;
+  /** Links "prova gratisfrågor" to this certification's free preview pool. */
+  freeTestCertId?: CertificationId;
 }) {
   return (
     <section>
@@ -65,6 +72,18 @@ export function WaitlistPage({
             </p>
           )}
         </div>
+
+        {freeTestCertId ? (
+          <p className="mt-8">
+            <Link
+              href={`/gratis-kunskapstest?intyg=${freeTestCertId}`}
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-sea-700 hover:underline dark:text-sea-300"
+            >
+              Prova gratisfrågor för {title} redan nu (förhandsversion)
+              <ArrowRight aria-hidden="true" className="size-3.5" />
+            </Link>
+          </p>
+        ) : null}
 
         <div className="mt-10 rounded-lg border border-border bg-paper-sunken/60 p-6">
           <h2 className="font-semibold">Få besked när kursen öppnar</h2>

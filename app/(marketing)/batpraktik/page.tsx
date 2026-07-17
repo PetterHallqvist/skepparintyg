@@ -11,6 +11,7 @@ export default function Page() {
   return (
     <WaitlistPage
       certId="batpraktik"
+      freeTestCertId="batpraktik_dag_prep"
       title="Båtpraktik — förberedelse"
       tagline="Checklista, genomgång och loggbok inför det handledda praktikpasset."
       covers={[

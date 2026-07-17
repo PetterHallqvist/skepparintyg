@@ -11,6 +11,7 @@ export default function Page() {
   return (
     <WaitlistPage
       certId="kustskepparintyg"
+      freeTestCertId="kustskepparintyg"
       title="Kustskepparintyg"
       tagline="Fördjupad navigation, mörkerkörning och ruttplanering för längre kustturer."
       covers={[

@@ -11,6 +11,7 @@ export default function Page() {
   return (
     <WaitlistPage
       certId="src"
+      freeTestCertId="src"
       title="SRC (VHF)"
       tagline="Marin radiokommunikation med scenarioövningar inför SRC-provet."
       covers={[

@@ -10,6 +10,7 @@ import { SectionHeading } from "@/components/design-system/section-heading";
 import { SourceStamp } from "@/components/design-system/source-stamp";
 import { StatusChip } from "@/components/design-system/status-chip";
 import { HeroChartCard } from "@/components/marketing/hero-chart-card";
+import { ALL_CERTIFICATIONS } from "@/lib/certifications/registry";
 import { BRAND } from "@/lib/brand";
 import { getFact } from "@/lib/content/official-facts";
 
@@ -56,40 +57,15 @@ const DIFFERENTIATORS = [
   },
 ] as const;
 
-const CERTIFICATES = [
-  {
-    id: "forarintyg",
-    title: "Förarintyg",
-    body: "Grundintyget för fritidsbåt. Sjökortsarbete, väjningsregler, säkerhet och sjömanskap.",
-    status: "Byggs nu",
-    tone: "info" as const,
-    href: "/forarintyg",
-  },
-  {
-    id: "kustskepparintyg",
-    title: "Kustskepparintyg",
-    body: "Fördjupad navigation, mörker och ruttplanering. Kräver Förarintyg och båtpraktik.",
-    status: "Planerad",
-    tone: "neutral" as const,
-    href: "/kustskepparintyg",
-  },
-  {
-    id: "src",
-    title: "SRC (VHF)",
-    body: "Marin radiokommunikation med scenarioövningar. Officiell simulator ingår i NFB:s process.",
-    status: "Planerad",
-    tone: "neutral" as const,
-    href: "/src",
-  },
-  {
-    id: "batpraktik",
-    title: "Båtpraktik — förberedelse",
-    body: "Checklista, genomgång och loggbok inför det handledda praktikpasset. Praktiken sker fysiskt.",
-    status: "Planerad",
-    tone: "neutral" as const,
-    href: "/batpraktik",
-  },
-] as const;
+/** Certificate cards (§77.1 item 5) — one card per registry certification. */
+const CERTIFICATES = ALL_CERTIFICATIONS.map((c) => ({
+  id: c.id,
+  title: c.nameSv,
+  body: c.tagline,
+  status: c.marketingStatusSv,
+  tone: c.marketingTone,
+  href: c.marketingPath,
+}));
 
 const FAQ = [
   {

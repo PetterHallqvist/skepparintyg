@@ -7,9 +7,53 @@ import {
   ALL_CERTIFICATIONS,
   certIdSchema,
   type CertificationDef,
+  type CertificationId,
 } from "@/lib/certifications/registry";
+import { isSupabaseConfigured } from "@/lib/env";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Välj intyg" };
+
+/**
+ * DB-mode preselection fallback: the stored learner target (§12.2), else the
+ * certification of an active entitlement. Never auto-chosen — the picker
+ * stays mandatory; this only pre-checks the likely card.
+ */
+async function storedTargetCertification(): Promise<CertificationId | null> {
+  if (!isSupabaseConfigured) return null;
+  try {
+    const supabase = await createSupabaseServerClient();
+    const { data: learner } = await supabase
+      .from("learners")
+      .select("target_certification_id")
+      .eq("is_self_profile", true)
+      .not("target_certification_id", "is", null)
+      .limit(1)
+      .maybeSingle();
+    const fromLearner = certIdSchema.safeParse(
+      learner?.target_certification_id,
+    );
+    if (fromLearner.success) return fromLearner.data;
+
+    const { data: ents } = await supabase
+      .from("entitlements")
+      .select("status, products(certification_id)")
+      .eq("status", "active")
+      .limit(1);
+    // Supabase infers embedded relations loosely — same idiom as guardian/data.
+    type ProductRef = { certification_id: string | null };
+    const product = (
+      ents?.[0] as { products: ProductRef[] | ProductRef | null } | undefined
+    )?.products;
+    const certId = Array.isArray(product)
+      ? product[0]?.certification_id
+      : product?.certification_id;
+    const fromEntitlement = certIdSchema.safeParse(certId);
+    return fromEntitlement.success ? fromEntitlement.data : null;
+  } catch {
+    return null;
+  }
+}
 
 /**
  * First-run certification picker (SPEC §12.2 target certificate). Mandatory:
@@ -72,9 +116,12 @@ export default async function ValjIntygPage({
   const { intyg, nasta } = await searchParams;
   const current = await getActiveCertificationId();
   const preselectParsed = certIdSchema.safeParse(intyg);
+  const stored = preselectParsed.success || current
+    ? null
+    : await storedTargetCertification();
   const preselected = preselectParsed.success
     ? preselectParsed.data
-    : (current ?? "forarintyg");
+    : (current ?? stored ?? "forarintyg");
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">

@@ -166,7 +166,9 @@ export const CERTIFICATIONS: Record<CertificationId, CertificationDef> = {
     ],
     chartLab: true,
     marketingPath: "/forarintyg",
-    marketingStatusSv: "Tillgängligt",
+    // Honest pre-launch posture (§11.1): active in-app, but the public offer
+    // is still being built until the content passes review.
+    marketingStatusSv: "Byggs nu",
     marketingTone: "info",
     readinessWeights: THEORY_WEIGHTS,
   },
