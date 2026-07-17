@@ -1,4 +1,4 @@
-import type { DemoItem } from "../demo";
+import type { DemoItem } from "../../demo";
 
 /**
  * Weather & decision trainer (SPEC §27). Fictional forecast/observation cards;

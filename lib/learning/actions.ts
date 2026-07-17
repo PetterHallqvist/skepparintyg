@@ -1,6 +1,12 @@
 "use server";
 
+import { cookies } from "next/headers";
 import { z } from "zod";
+import {
+  CERT_COOKIE,
+  certIdSchema,
+  type CertificationId,
+} from "@/lib/certifications/registry";
 import { gradeResponse } from "@/lib/grading";
 import { sanitizeDemoItem, type DemoChallenge } from "@/lib/learning/demo";
 import { getTrackItems } from "@/lib/learning/tracks";
@@ -10,9 +16,20 @@ import { logger } from "@/lib/observability/logger";
  * Learning-loop server actions (SPEC §60.1). Ships the demo/track path
  * (no database) with the same contract as the DB path: the client NEVER
  * receives an answer key before grading (§58.3), and grading is always
- * server-side (§58.2). Phase 4 generalises the demo path into named practice
- * *tracks* so every trainer route reuses this one loop.
+ * server-side (§58.2). Items are certification-scoped: the httpOnly
+ * certification cookie is the server-side truth for which knowledge base a
+ * learner draws from — a client-passed hint is honoured only when no cookie
+ * exists (the public free test), where it can at most select among the free
+ * public pools.
  */
+
+async function resolveCert(clientCert?: unknown): Promise<CertificationId> {
+  const jar = await cookies();
+  const fromCookie = certIdSchema.safeParse(jar.get(CERT_COOKIE)?.value);
+  if (fromCookie.success) return fromCookie.data;
+  const fromClient = certIdSchema.safeParse(clientCert);
+  return fromClient.success ? fromClient.data : "forarintyg";
+}
 
 export type AttemptFeedback = {
   correct: boolean;
@@ -27,19 +44,22 @@ export type AttemptFeedback = {
 };
 
 const submitSchema = z.object({
-  track: z.string().default("demo"),
+  track: z.string().default("pass"),
   index: z.number().int().min(0),
   response: z.unknown(),
   confidence: z.enum(["guessed", "fairly_sure", "very_sure"]).nullable(),
   hintLevel: z.number().int().min(0).max(4),
   activeLatencyMs: z.number().int().min(0).nullable(),
+  cert: z.string().optional(),
 });
 
 export async function getTrackChallenge(
   track: string,
   index: number,
+  cert?: string,
 ): Promise<DemoChallenge> {
-  const items = getTrackItems(track);
+  const items = getTrackItems(await resolveCert(cert), track);
+  if (!items) throw new Error("okant_spar");
   const item = items[index];
   if (!item) throw new Error("track_slut");
   return sanitizeDemoItem(item, items.length);
@@ -49,7 +69,9 @@ export async function submitTrackAttempt(
   input: z.input<typeof submitSchema>,
 ): Promise<AttemptFeedback> {
   const parsed = submitSchema.parse(input);
-  const items = getTrackItems(parsed.track);
+  const certId = await resolveCert(parsed.cert);
+  const items = getTrackItems(certId, parsed.track);
+  if (!items) throw new Error("okant_spar");
   const item = items[parsed.index];
   if (!item) throw new Error("track_slut");
 
@@ -79,6 +101,7 @@ export async function submitTrackAttempt(
   }
 
   logger.info("track.attempt", {
+    certification: certId,
     track: parsed.track,
     index: parsed.index,
     kind: item.kind,
@@ -101,8 +124,11 @@ export async function getTrackHint(
   track: string,
   index: number,
   tier: number,
+  cert?: string,
 ): Promise<{ tier: number; text: string }> {
-  const item = getTrackItems(track)[index];
+  const items = getTrackItems(await resolveCert(cert), track);
+  if (!items) throw new Error("okant_spar");
+  const item = items[index];
   if (!item) throw new Error("track_slut");
   if (tier <= 1) {
     return {
@@ -117,25 +143,6 @@ export async function getTrackHint(
     tier: Math.min(tier, 3),
     text: "Ledtråd: gå tillbaka till lektionen och jämför alternativen noggrant.",
   };
-}
-
-// --- backward-compatible demo wrappers -------------------------------------
-
-export async function getDemoChallenge(index: number): Promise<DemoChallenge> {
-  return getTrackChallenge("demo", index);
-}
-
-export async function submitDemoAttempt(
-  input: Omit<z.input<typeof submitSchema>, "track">,
-): Promise<AttemptFeedback> {
-  return submitTrackAttempt({ ...input, track: "demo" });
-}
-
-export async function getDemoHint(
-  index: number,
-  tier: number,
-): Promise<{ tier: number; text: string }> {
-  return getTrackHint("demo", index, tier);
 }
 
 // --- diagnosis copy ---------------------------------------------------------

@@ -1,4 +1,4 @@
-import type { DemoItem } from "../demo";
+import type { DemoItem } from "../../demo";
 
 /**
  * Electronic-chart plotter concept trainer (SPEC §21.5). Five task types on a

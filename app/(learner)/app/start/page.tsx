@@ -1,30 +1,86 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Compass, NotebookPen, RefreshCw } from "lucide-react";
+import {
+  ArrowRight,
+  Compass,
+  NotebookPen,
+  RefreshCw,
+  Repeat,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataReadout } from "@/components/design-system/data-readout";
 import { ReadinessGauge } from "@/components/design-system/readiness-gauge";
 import { StatusChip } from "@/components/design-system/status-chip";
+import { requireActiveCertification } from "@/lib/certifications/active";
+import { trackCount } from "@/lib/learning/tracks";
 
 export const metadata: Metadata = { title: "Start" };
 
 /**
- * Dashboard shell (SPEC §12.3): ONE primary action — "Dagens pass".
- * Placeholder data until the learning engine lands (Phase 2).
+ * Dashboard shell (SPEC §12.3): ONE primary action — "Dagens pass" — scoped
+ * to the active certification. Readout values are placeholders until the DB
+ * learning loop lands; the certification context and links are real.
  */
-export default function StartPage() {
+export default async function StartPage() {
+  const def = await requireActiveCertification("/app/start");
+  const passCount = trackCount(def.id, "pass");
+  const firstTopicTrack = def.tracks.find((t) => t.id !== "pass");
+
+  const quickLinks = [
+    ...(def.chartLab
+      ? [
+          {
+            href: "/app/sjokort",
+            icon: Compass,
+            title: "Sjökortslabbet",
+            hint: "Mät distans i Grundviken",
+          },
+        ]
+      : []),
+    ...(firstTopicTrack
+      ? [
+          {
+            href: `/app/ova/${firstTopicTrack.id}`,
+            icon: NotebookPen,
+            title: firstTopicTrack.title,
+            hint: firstTopicTrack.blurb,
+          },
+        ]
+      : []),
+    {
+      href: "/app/ova/repetition",
+      icon: RefreshCw,
+      title: "Träna på dina fel",
+      hint: "Riktat repetitionspass från felboken",
+    },
+  ];
+
   return (
     <div className="bg-graticule min-h-full">
       <div className="mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6">
         <header className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-label text-muted-foreground">Förarintyg</p>
+            <p className="text-label flex items-center gap-2 text-muted-foreground">
+              {def.nameSv}
+              <Link
+                href="/app/valj-intyg?nasta=/app/start"
+                className="inline-flex items-center gap-1 font-medium normal-case tracking-normal text-primary hover:underline"
+              >
+                <Repeat aria-hidden="true" className="size-3" />
+                Byt intyg
+              </Link>
+            </p>
             <h1 className="mt-1 text-2xl font-semibold tracking-tight">
               God eftermiddag
             </h1>
           </div>
-          <StatusChip tone="info">Demo­data</StatusChip>
+          <div className="flex gap-2">
+            {def.status === "preview" ? (
+              <StatusChip tone="warning">Förhandsversion</StatusChip>
+            ) : null}
+            <StatusChip tone="info">Demo­data</StatusChip>
+          </div>
         </header>
 
         {/* Primary action */}
@@ -32,10 +88,12 @@ export default function StartPage() {
           <CardContent className="flex flex-wrap items-center justify-between gap-6">
             <div className="min-w-56">
               <p className="text-label text-muted-foreground">Dagens pass</p>
-              <p className="mt-1.5 text-xl font-semibold">Cirka 18 minuter</p>
+              <p className="mt-1.5 text-xl font-semibold">
+                {passCount} blandade uppgifter
+              </p>
               <p className="mt-1 text-sm text-muted-foreground">
-                Repetition av väjningsregler · distansmätning · 4 blandade
-                uppgifter
+                Ur kunskapsbasen för {def.nameSv} — rättas och förklaras steg
+                för steg
               </p>
             </div>
             <Button size="lg" render={<Link href="/app/ova/pass" />}>
@@ -54,7 +112,7 @@ export default function StartPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col items-center gap-4">
-              <ReadinessGauge score={62} />
+              <ReadinessGauge score={def.status === "active" ? 62 : 0} />
               <Link
                 href="/app/framsteg"
                 className="text-sm font-medium text-primary hover:underline"
@@ -82,26 +140,7 @@ export default function StartPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-1">
-                {[
-                  {
-                    href: "/app/sjokort",
-                    icon: Compass,
-                    title: "Sjökortslabbet",
-                    hint: "Mät distans i Grundviken",
-                  },
-                  {
-                    href: "/app/ova/vajning",
-                    icon: NotebookPen,
-                    title: "Väjningsregler",
-                    hint: "2 av 8 scenarier kvar",
-                  },
-                  {
-                    href: "/app/ova/repetition",
-                    icon: RefreshCw,
-                    title: "Träna på dina fel",
-                    hint: "Riktat repetitionspass från felboken",
-                  },
-                ].map((row) => (
+                {quickLinks.map((row) => (
                   <Link
                     key={row.href}
                     href={row.href}
@@ -115,13 +154,13 @@ export default function StartPage() {
                       <span className="block text-sm font-medium">
                         {row.title}
                       </span>
-                      <span className="block text-xs text-muted-foreground">
+                      <span className="block truncate text-xs text-muted-foreground">
                         {row.hint}
                       </span>
                     </span>
                     <ArrowRight
                       aria-hidden="true"
-                      className="size-4 text-muted-foreground"
+                      className="size-4 shrink-0 text-muted-foreground"
                     />
                   </Link>
                 ))}

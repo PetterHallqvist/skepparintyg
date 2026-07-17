@@ -1,4 +1,4 @@
-import type { DemoItem } from "../demo";
+import type { DemoItem } from "../../demo";
 
 /**
  * Knot trainer content (SPEC §26). Two knots, each with an ordering task and a

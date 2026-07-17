@@ -15,13 +15,14 @@ import {
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { StatusChip } from "@/components/design-system/status-chip";
-import { TRACK_META } from "@/lib/learning/track-meta";
+import type { CertTrackMeta } from "@/lib/certifications/registry";
 import { cn } from "@/lib/utils";
 
 /**
- * Trainer directory (the /app/ova hub). One card per practice track, plus the
- * chart lab and — when there are open felbok patterns — a remediation entry.
- * Counts and the felbok total are computed server-side and passed in.
+ * Trainer directory (the /app/ova hub). One card per practice track of the
+ * ACTIVE certification, plus the chart lab (navigation certificates only)
+ * and — when there are open felbok patterns — a remediation entry. Tracks
+ * and counts are resolved server-side and passed in.
  */
 
 const ICONS: Record<string, LucideIcon> = {
@@ -81,10 +82,14 @@ function TrainerCard({
 }
 
 export function TrainerDirectory({
+  tracks,
   counts,
+  chartLab,
   felbokOpen,
 }: {
+  tracks: CertTrackMeta[];
   counts: Record<string, number>;
+  chartLab: boolean;
   felbokOpen: number;
 }) {
   return (
@@ -112,23 +117,25 @@ export function TrainerDirectory({
       ) : null}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {TRACK_META.map((t) => (
+        {tracks.map((t) => (
           <TrainerCard
             key={t.id}
-            href={t.route}
+            href={`/app/ova/${t.id}`}
             title={t.title}
             blurb={t.blurb}
             icon={ICONS[t.icon] ?? GraduationCap}
             meta={counts[t.id] ? `${counts[t.id]} uppgifter` : undefined}
-            accent={t.id === "demo"}
+            accent={t.id === "pass"}
           />
         ))}
-        <TrainerCard
-          href="/app/sjokort"
-          title="Sjökortslabbet"
-          blurb="Mät, sätt ut och räkna på ett fiktivt övningskort."
-          icon={Compass}
-        />
+        {chartLab ? (
+          <TrainerCard
+            href="/app/sjokort"
+            title="Sjökortslabbet"
+            blurb="Mät, sätt ut och räkna på ett fiktivt övningskort."
+            icon={Compass}
+          />
+        ) : null}
       </div>
     </div>
   );

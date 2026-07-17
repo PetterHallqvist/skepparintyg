@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ChevronRight, Download, HeartHandshake, LogOut, Trash2, Users } from "lucide-react";
+import { ChevronRight, Download, HeartHandshake, LogOut, Repeat, Trash2, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { StatusChip } from "@/components/design-system/status-chip";
+import { getActiveCertificationId } from "@/lib/certifications/active";
+import { certification } from "@/lib/certifications/registry";
 import { isSupabaseConfigured } from "@/lib/env";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { signOutAction } from "@/lib/account/actions";
@@ -37,6 +39,9 @@ const LINKS = [
 ] as const;
 
 export default async function KontoPage() {
+  const activeCertId = await getActiveCertificationId();
+  const activeCert = activeCertId ? certification(activeCertId) : null;
+
   let email: string | null = null;
   if (isSupabaseConfigured) {
     const supabase = await createSupabaseServerClient();
@@ -45,6 +50,18 @@ export default async function KontoPage() {
     } = await supabase.auth.getUser();
     email = user?.email ?? null;
   }
+
+  const rows = [
+    {
+      href: "/app/valj-intyg?nasta=/app/konto",
+      icon: Repeat,
+      title: activeCert ? "Byt intyg" : "Välj intyg",
+      body: activeCert
+        ? `Du pluggar mot ${activeCert.nameSv}. Hela appen anpassas efter valet.`
+        : "Välj vilket intyg du pluggar för — hela appen anpassas efter valet.",
+    },
+    ...LINKS,
+  ];
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
@@ -61,7 +78,7 @@ export default async function KontoPage() {
       </header>
 
       <ul className="divide-y divide-border overflow-hidden rounded-lg border border-border">
-        {LINKS.map((l) => (
+        {rows.map((l) => (
           <li key={l.href}>
             <Link
               href={l.href}

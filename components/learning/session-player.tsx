@@ -30,10 +30,17 @@ type Phase = "loading" | "answering" | "confidence" | "feedback" | "done";
  */
 export function SessionPlayer({
   initialChallenge,
-  track = "demo",
+  track = "pass",
+  cert,
 }: {
   initialChallenge: DemoChallenge;
   track?: string;
+  /**
+   * Certification hint forwarded to the server actions. In-app the httpOnly
+   * cookie always wins server-side; the hint matters only on the public free
+   * test where no cookie exists.
+   */
+  cert?: string;
 }) {
   const total = initialChallenge.total;
   const [phase, setPhase] = useState<Phase>("answering");
@@ -54,7 +61,7 @@ export function SessionPlayer({
   const load = async (index: number) => {
     setPhase("loading");
     try {
-      const c = await getTrackChallenge(track, index);
+      const c = await getTrackChallenge(track, index, cert);
       setChallenge(c);
       setResponse(null);
       setPendingResponse(null);
@@ -80,6 +87,7 @@ export function SessionPlayer({
       confidence,
       hintLevel,
       activeLatencyMs,
+      cert,
     });
     if (fb.correct) setCorrectCount((n) => n + 1);
     setFeedback(fb);
@@ -89,7 +97,7 @@ export function SessionPlayer({
   const requestHint = async () => {
     if (!challenge) return;
     const next = Math.min(hintLevel + 1, 3);
-    const h = await getTrackHint(track, challenge.index, next);
+    const h = await getTrackHint(track, challenge.index, next, cert);
     setHint(h.text);
     setHintLevel(h.tier);
   };

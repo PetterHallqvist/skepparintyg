@@ -1,4 +1,4 @@
-import type { DemoItem } from "../demo";
+import type { DemoItem } from "../../demo";
 import type { Scene } from "@/lib/trainers/rules-schema";
 
 /**

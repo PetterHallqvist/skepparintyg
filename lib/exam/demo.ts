@@ -10,7 +10,7 @@ import { assembleExam, type Blueprint } from "@/lib/exam/assembly";
  * a database. Answer keys never leave this server-only module.
  */
 
-const POOL_TRACKS = ["demo", "ljus", "vajning", "knop", "vader"];
+const POOL_TRACKS = ["pass", "ljus", "vajning", "knop", "vader"];
 
 export interface DemoPoolEntry {
   id: string;
@@ -21,7 +21,7 @@ export interface DemoPoolEntry {
 export function getDemoExamPool(): DemoPoolEntry[] {
   const entries: DemoPoolEntry[] = [];
   for (const track of POOL_TRACKS) {
-    getTrackItems(track).forEach((item, i) =>
+    (getTrackItems("forarintyg", track) ?? []).forEach((item, i) =>
       entries.push({
         id: `${track}:${i}`,
         item,

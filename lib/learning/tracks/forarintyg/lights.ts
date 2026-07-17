@@ -1,4 +1,4 @@
-import type { DemoItem } from "../demo";
+import type { DemoItem } from "../../demo";
 
 /**
  * Lights, day shapes & sound-signal trainer content (SPEC §25, §28.4).
