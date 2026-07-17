@@ -1,16 +1,22 @@
 import "server-only";
+import {
+  certification,
+  type CertificationId,
+} from "@/lib/certifications/registry";
 import { getTrackItems } from "@/lib/learning/tracks";
 import type { DemoItem } from "@/lib/learning/demo";
+import { EXAM_CONFIG } from "@/lib/exam/blueprints";
 import { assembleExam, type Blueprint } from "@/lib/exam/assembly";
 
 /**
- * Demo simulation (SPEC §35). Builds a real, deterministic exam from the demo
- * item pool so the runner — server timer, no-feedback-until-submit, one-final-
- * submission, 75 % scoring, diagnostic separation — is fully exercisable without
- * a database. Answer keys never leave this server-only module.
+ * Demo simulation (SPEC §35), certification-scoped. Builds a real,
+ * deterministic exam from ONE certification's item pool so the runner —
+ * server timer, no-feedback-until-submit, one-final-submission, 75 % scoring,
+ * diagnostic separation — is fully exercisable without a database. Pool ids
+ * are namespaced `${cert}/${track}:${index}`, so a session can never grade
+ * against another certification's items. Answer keys never leave this
+ * server-only module.
  */
-
-const POOL_TRACKS = ["pass", "ljus", "vajning", "knop", "vader"];
 
 export interface DemoPoolEntry {
   id: string;
@@ -18,12 +24,12 @@ export interface DemoPoolEntry {
   objectiveTag: string;
 }
 
-export function getDemoExamPool(): DemoPoolEntry[] {
+export function getDemoExamPool(cert: CertificationId): DemoPoolEntry[] {
   const entries: DemoPoolEntry[] = [];
-  for (const track of POOL_TRACKS) {
-    (getTrackItems("forarintyg", track) ?? []).forEach((item, i) =>
+  for (const track of certification(cert).tracks) {
+    (getTrackItems(cert, track.id) ?? []).forEach((item, i) =>
       entries.push({
-        id: `${track}:${i}`,
+        id: `${cert}/${track.id}:${i}`,
         item,
         objectiveTag: item.objectiveTitle,
       }),
@@ -38,20 +44,25 @@ export interface BuiltDemoExam {
   itemById: Map<string, DemoItem>;
 }
 
-/** Build the deterministic demo exam for a given seed. */
-export function buildDemoExam(seed: string): BuiltDemoExam {
-  const pool = getDemoExamPool();
+/** Build the deterministic demo exam for a certification and seed. */
+export function buildDemoExam(
+  cert: CertificationId,
+  seed: string,
+): BuiltDemoExam {
+  const config = EXAM_CONFIG[cert];
+  const pool = getDemoExamPool(cert);
   const allTags = [...new Set(pool.map((p) => p.objectiveTag))];
-  const safetyTags = allTags.filter((t) => /[Ss]äkerhet|[Nn]öd/.test(t));
+  const diagTags = allTags.filter((t) => config.diagnosticTagPattern.test(t));
 
-  // 20-minute demo (a real Förarintyg blueprint runs 90). Two sections: a
-  // graded mix and a small diagnostic block (excluded from the pass calc).
-  const gradedCount = Math.min(6, Math.max(1, pool.length - 2));
+  const gradedCount = Math.min(
+    config.gradedCount,
+    Math.max(1, pool.length - 2),
+  );
   const blueprint: Blueprint = {
-    id: "forar-sim-demo",
-    title: "Träningssimulering — Förarintyg",
-    durationSeconds: 20 * 60,
-    passThresholdBp: 7500,
+    id: `${cert}-sim-demo`,
+    title: config.titleSv,
+    durationSeconds: config.durationSeconds,
+    passThresholdBp: config.passThresholdBp,
     sections: [
       {
         id: "del1",
@@ -61,9 +72,9 @@ export function buildDemoExam(seed: string): BuiltDemoExam {
       },
       {
         id: "diag",
-        title: "Diagnos — säkerhet",
+        title: config.diagnosticTitle,
         isDiagnostic: true,
-        objectiveTags: safetyTags.length ? safetyTags : allTags,
+        objectiveTags: diagTags.length ? diagTags : allTags,
         count: 2,
       },
     ],

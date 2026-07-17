@@ -4,10 +4,9 @@ import { ReadinessGauge } from "@/components/design-system/readiness-gauge";
 import { StatusChip } from "@/components/design-system/status-chip";
 import {
   computeReadiness,
-  DEFAULT_WEIGHTS,
   type ReadinessComponents,
 } from "@/lib/domain/readiness";
-import { FORAR_MODULES } from "@/lib/curriculum/modules";
+import { requireActiveCertification } from "@/lib/certifications/active";
 import { BRAND } from "@/lib/brand";
 import { isSupabaseConfigured } from "@/lib/env";
 
@@ -22,24 +21,40 @@ const COMPONENT_LABELS: Record<keyof ReadinessComponents, string> = {
 };
 
 /**
- * Beredskap dashboard (SPEC §17.5): the score is never shown without its
- * "Så beräknas detta" explanation. Demo evidence until the DB path is live.
+ * Beredskap dashboard (SPEC §17.5), certification-scoped: modules and
+ * weights come from the active certification's registry entry (§17.1 —
+ * weights are certification-specific config). The score is never shown
+ * without its "Så beräknas detta" explanation. Demo evidence until the DB
+ * path is live; preview certifications honestly show zero progress.
  */
-export default function FramstegPage() {
-  const components: ReadinessComponents = {
-    coverage: 0.55,
-    recall: 0.62,
-    procedural: 0.4,
-    simulations: 0,
-    calibration: 0.7,
-  };
-  const result = computeReadiness(components, {
-    unseenSafetyCriticalObjective: false,
-    failedSafetyCriticalLast72h: false,
-    noValidTimedSimulation: true,
-    noIndependentChartEvidence: true,
-    staleSyllabusMapping: false,
-  });
+export default async function FramstegPage() {
+  const def = await requireActiveCertification("/app/framsteg");
+  const weights = def.readinessWeights;
+
+  // Demo evidence exists only for the active (Förarintyg) content bank —
+  // preview certifications start from honest zeros (§11.1).
+  const components: ReadinessComponents =
+    def.status === "active"
+      ? {
+          coverage: 0.55,
+          recall: 0.62,
+          procedural: 0.4,
+          simulations: 0,
+          calibration: 0.7,
+        }
+      : { coverage: 0, recall: 0, procedural: 0, simulations: 0, calibration: 0 };
+
+  const result = computeReadiness(
+    components,
+    {
+      unseenSafetyCriticalObjective: false,
+      failedSafetyCriticalLast72h: false,
+      noValidTimedSimulation: true,
+      noIndependentChartEvidence: def.chartLab,
+      staleSyllabusMapping: false,
+    },
+    weights,
+  );
 
   if (result.hidden) {
     return (
@@ -51,19 +66,30 @@ export default function FramstegPage() {
     );
   }
 
+  const moduleRange = `${def.modules[0]?.id}–${def.modules[def.modules.length - 1]?.id}`;
+  const hasKnop = def.tracks.some((t) => t.id === "knop");
+
   return (
     <div className="bg-graticule min-h-full">
       <div className="mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6">
         <header className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight">Framsteg</h1>
+            <p className="text-label text-muted-foreground">{def.nameSv}</p>
+            <h1 className="mt-1 text-2xl font-semibold tracking-tight">
+              Framsteg
+            </h1>
             <p className="mt-1 text-sm text-muted-foreground">
               {BRAND.readinessDisclaimer}
             </p>
           </div>
-          {!isSupabaseConfigured ? (
-            <StatusChip tone="warning">Demodata</StatusChip>
-          ) : null}
+          <div className="flex gap-2">
+            {def.status === "preview" ? (
+              <StatusChip tone="warning">Förhandsversion</StatusChip>
+            ) : null}
+            {!isSupabaseConfigured ? (
+              <StatusChip tone="warning">Demodata</StatusChip>
+            ) : null}
+          </div>
         </header>
 
         <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
@@ -91,7 +117,7 @@ export default function FramstegPage() {
                     <p className="text-sm font-medium">
                       {COMPONENT_LABELS[key]}
                       <span className="ml-2 text-xs text-muted-foreground">
-                        vikt {Math.round(DEFAULT_WEIGHTS[key] * 100)} %
+                        vikt {Math.round(weights[key] * 100)} %
                       </span>
                     </p>
                     <div
@@ -142,21 +168,23 @@ export default function FramstegPage() {
           <DataReadout label="Algoritm" value="v1" hint="beredskap-v1" />
         </div>
 
-        {/* §28 — per-module breadth */}
+        {/* Curriculum blueprint — per-module breadth (§28–§33) */}
         <section
           aria-labelledby="moduler"
           className="rounded-lg border border-border bg-card p-6"
         >
           <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
             <h2 id="moduler" className="text-label text-muted-foreground">
-              Måltäckning per modul (F1–F12)
+              Måltäckning per modul ({moduleRange})
             </h2>
-            <span className="text-xs text-muted-foreground">
-              Praktiska knopmoment räknas som ”teoretiskt förberedd”
-            </span>
+            {hasKnop ? (
+              <span className="text-xs text-muted-foreground">
+                Praktiska knopmoment räknas som ”teoretiskt förberedd”
+              </span>
+            ) : null}
           </div>
           <ul className="grid gap-x-6 gap-y-3 sm:grid-cols-2">
-            {FORAR_MODULES.map((m) => {
+            {def.modules.map((m) => {
               const pct = Math.round(m.demoReadiness * 100);
               return (
                 <li key={m.id} className="grid grid-cols-[2.5rem_1fr_2.5rem] items-center gap-3">
@@ -164,13 +192,13 @@ export default function FramstegPage() {
                     {m.id}
                   </span>
                   <div>
-                    <p className="text-sm">{m.title_sv}</p>
+                    <p className="text-sm">{m.titleSv}</p>
                     <div
                       role="progressbar"
                       aria-valuenow={pct}
                       aria-valuemin={0}
                       aria-valuemax={100}
-                      aria-label={`${m.id} ${m.title_sv}`}
+                      aria-label={`${m.id} ${m.titleSv}`}
                       className="mt-1 h-1.5 overflow-hidden rounded-full bg-muted"
                     >
                       <div

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Logo } from "@/components/design-system/logo";
 import { AppSidebarNav, AppTabBar } from "@/components/learning/app-nav";
+import { getActiveCertificationId } from "@/lib/certifications/active";
+import { certification } from "@/lib/certifications/registry";
 import { isSupabaseConfigured } from "@/lib/env";
 import { BRAND } from "@/lib/brand";
 
@@ -9,14 +11,17 @@ import { BRAND } from "@/lib/brand";
 export const metadata: Metadata = { robots: { index: false, follow: false } };
 
 /**
- * Learner shell — "navigation console" (instrument theme).
- * Lesson reading surfaces render as light paper sheets inside (Phase 2).
+ * Learner shell — "navigation console" (instrument theme). Navigation is
+ * tailored to the active certification (chart-lab entry only where §20.2
+ * says it applies). Lesson reading surfaces render as light paper sheets.
  */
-export default function LearnerLayout({
+export default async function LearnerLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const activeCertId = await getActiveCertificationId();
+  const chartLab = activeCertId ? certification(activeCertId).chartLab : true;
   return (
     <div className="theme-instrument flex min-h-svh flex-col bg-background text-foreground">
       {!isSupabaseConfigured ? (
@@ -37,7 +42,7 @@ export default function LearnerLayout({
             </Link>
           </div>
           <div className="flex-1 p-3">
-            <AppSidebarNav />
+            <AppSidebarNav chartLab={chartLab} />
           </div>
           <p className="border-t border-border p-4 text-xs leading-relaxed text-muted-foreground">
             {BRAND.navigationDisclaimer}
@@ -56,7 +61,7 @@ export default function LearnerLayout({
         </div>
       </div>
 
-      <AppTabBar />
+      <AppTabBar chartLab={chartLab} />
     </div>
   );
 }

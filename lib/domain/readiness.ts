@@ -59,7 +59,8 @@ const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
 export function computeReadiness(
   components: ReadinessComponents,
   caps: ReadinessCapFlags,
-  weights: typeof DEFAULT_WEIGHTS = DEFAULT_WEIGHTS,
+  // Same shape as the components record — per-certification config (§17.1).
+  weights: ReadinessComponents = DEFAULT_WEIGHTS,
 ): ReadinessResult {
   // §17.3: stale mapping hides the score entirely — never mislead.
   if (caps.staleSyllabusMapping) {

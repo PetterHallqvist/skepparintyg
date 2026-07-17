@@ -11,29 +11,49 @@ import {
   NotebookPen,
   Target,
   UserRound,
+  type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+/**
+ * App navigation, tailored to the active certification: the chart-lab slot
+ * appears only for the navigation certificates (chartLab); the mobile tab
+ * bar promotes the simulation instead for everyone else.
+ */
+
+type NavItem = { href: string; label: string; icon: LucideIcon };
+
+const START: NavItem = { href: "/app/start", label: "Start", icon: Home };
+const OVA: NavItem = { href: "/app/ova", label: "Öva", icon: GraduationCap };
+const SJOKORT: NavItem = { href: "/app/sjokort", label: "Sjökort", icon: Compass };
+const SIMULERING: NavItem = {
+  href: "/app/simulering",
+  label: "Simulering",
+  icon: Target,
+};
+const FELBOK: NavItem = { href: "/app/felbok", label: "Felboken", icon: NotebookPen };
+const KORTLEKAR: NavItem = { href: "/app/kortlekar", label: "Kortlekar", icon: Layers };
+const FRAMSTEG: NavItem = { href: "/app/framsteg", label: "Framsteg", icon: BarChart3 };
+const KONTO: NavItem = { href: "/app/konto", label: "Konto", icon: UserRound };
+
 /** Mobile tab bar: max five primary destinations. */
-export const APP_NAV = [
-  { href: "/app/start", label: "Start", icon: Home },
-  { href: "/app/ova", label: "Öva", icon: GraduationCap },
-  { href: "/app/sjokort", label: "Sjökort", icon: Compass },
-  { href: "/app/framsteg", label: "Framsteg", icon: BarChart3 },
-  { href: "/app/konto", label: "Konto", icon: UserRound },
-] as const;
+function tabItems(chartLab: boolean): NavItem[] {
+  return [START, OVA, chartLab ? SJOKORT : SIMULERING, FRAMSTEG, KONTO];
+}
 
 /** Desktop sidebar: full set. */
-const SIDEBAR_NAV = [
-  APP_NAV[0],
-  APP_NAV[1],
-  APP_NAV[2],
-  { href: "/app/simulering", label: "Simulering", icon: Target },
-  { href: "/app/felbok", label: "Felboken", icon: NotebookPen },
-  { href: "/app/kortlekar", label: "Kortlekar", icon: Layers },
-  APP_NAV[3],
-  APP_NAV[4],
-] as const;
+function sidebarItems(chartLab: boolean): NavItem[] {
+  return [
+    START,
+    OVA,
+    ...(chartLab ? [SJOKORT] : []),
+    SIMULERING,
+    FELBOK,
+    KORTLEKAR,
+    FRAMSTEG,
+    KONTO,
+  ];
+}
 
 function useIsActive() {
   const pathname = usePathname();
@@ -41,11 +61,11 @@ function useIsActive() {
 }
 
 /** Desktop sidebar navigation. */
-export function AppSidebarNav() {
+export function AppSidebarNav({ chartLab = true }: { chartLab?: boolean }) {
   const isActive = useIsActive();
   return (
     <nav aria-label="Appmeny" className="space-y-1">
-      {SIDEBAR_NAV.map((item) => (
+      {sidebarItems(chartLab).map((item) => (
         <Link
           key={item.href}
           href={item.href}
@@ -66,7 +86,7 @@ export function AppSidebarNav() {
 }
 
 /** Mobile bottom tab bar. */
-export function AppTabBar() {
+export function AppTabBar({ chartLab = true }: { chartLab?: boolean }) {
   const isActive = useIsActive();
   return (
     <nav
@@ -74,7 +94,7 @@ export function AppTabBar() {
       className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 backdrop-blur-sm md:hidden"
     >
       <ul className="grid grid-cols-5">
-        {APP_NAV.map((item) => (
+        {tabItems(chartLab).map((item) => (
           <li key={item.href}>
             <Link
               href={item.href}

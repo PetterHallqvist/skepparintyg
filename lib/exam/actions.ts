@@ -1,6 +1,12 @@
 "use server";
 
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import {
+  CERT_COOKIE,
+  certIdSchema,
+  type CertificationId,
+} from "@/lib/certifications/registry";
 import { gradeResponse } from "@/lib/grading";
 import { buildDemoExam } from "@/lib/exam/demo";
 import { sanitizeDemoItem } from "@/lib/learning/demo";
@@ -11,9 +17,12 @@ import { logger } from "@/lib/observability/logger";
 /**
  * Demo simulation actions (SPEC §35). Session state lives in an httpOnly cookie
  * — the client cannot read or extend it, so the timer is server-authoritative
- * even in the demo. The challenge payloads NEVER contain answer keys (§58.3);
- * grading happens only here on submit; the cookie is cleared on submit so a
- * session can never be re-scored (one-final-submission, §35.5).
+ * even in the demo. The session is BOUND to the certification it was started
+ * for: switching the active certification mid-exam can never mix item pools
+ * (the page shows a resume/discard notice instead of rendering a mixed exam).
+ * The challenge payloads NEVER contain answer keys (§58.3); grading happens
+ * only here on submit; the cookie is cleared on submit so a session can never
+ * be re-scored (one-final-submission, §35.5).
  */
 
 const COOKIE = "sim_demo";
@@ -21,6 +30,7 @@ const COOKIE = "sim_demo";
 interface Session {
   seed: string;
   startedAt: string;
+  cert: CertificationId;
 }
 
 export interface ExamChallenge {
@@ -36,6 +46,7 @@ export interface ExamChallenge {
 }
 
 export interface ExamState {
+  cert: CertificationId;
   title: string;
   startedAt: string;
   durationSeconds: number;
@@ -50,15 +61,32 @@ function encode(session: Session): string {
 function decode(raw: string): Session | null {
   try {
     const s = JSON.parse(Buffer.from(raw, "base64url").toString("utf8"));
-    if (typeof s?.seed === "string" && typeof s?.startedAt === "string") return s;
+    const cert = certIdSchema.safeParse(s?.cert);
+    // Legacy cookies without a certification decode to null — invalidated.
+    if (
+      typeof s?.seed === "string" &&
+      typeof s?.startedAt === "string" &&
+      cert.success
+    ) {
+      return { seed: s.seed, startedAt: s.startedAt, cert: cert.data };
+    }
   } catch {
     /* fall through */
   }
   return null;
 }
 
+async function activeCert(): Promise<CertificationId> {
+  const jar = await cookies();
+  const parsed = certIdSchema.safeParse(jar.get(CERT_COOKIE)?.value);
+  return parsed.success ? parsed.data : "forarintyg";
+}
+
 function buildState(session: Session): ExamState {
-  const { blueprint, assembled, itemById } = buildDemoExam(session.seed);
+  const { blueprint, assembled, itemById } = buildDemoExam(
+    session.cert,
+    session.seed,
+  );
   const challenges: ExamChallenge[] = [];
   let position = 0;
   for (const section of assembled.sections) {
@@ -79,6 +107,7 @@ function buildState(session: Session): ExamState {
     }
   }
   return {
+    cert: session.cert,
     title: blueprint.title,
     startedAt: session.startedAt,
     durationSeconds: blueprint.durationSeconds,
@@ -93,9 +122,11 @@ function buildState(session: Session): ExamState {
 }
 
 export async function startDemoExam(): Promise<ExamState> {
+  const cert = await activeCert();
   const session: Session = {
     seed: globalThis.crypto.randomUUID(),
     startedAt: new Date().toISOString(),
+    cert,
   };
   const jar = await cookies();
   jar.set(COOKIE, encode(session), {
@@ -104,7 +135,7 @@ export async function startDemoExam(): Promise<ExamState> {
     path: "/",
     maxAge: 60 * 60,
   });
-  logger.info("exam.demo_started", {});
+  logger.info("exam.demo_started", { certification: cert });
   return buildState(session);
 }
 
@@ -114,6 +145,14 @@ export async function getDemoExamState(): Promise<ExamState | null> {
   if (!raw) return null;
   const session = decode(raw);
   return session ? buildState(session) : null;
+}
+
+/** Abandon an in-progress session (used when the certification changed). */
+export async function discardDemoExam(): Promise<void> {
+  const jar = await cookies();
+  jar.delete(COOKIE);
+  logger.info("exam.demo_discarded", {});
+  redirect("/app/simulering");
 }
 
 export interface ExamWrongItem {
@@ -137,7 +176,10 @@ export async function submitDemoExam(
   const session = raw ? decode(raw) : null;
   if (!session) return { error: "no_session" };
 
-  const { blueprint, assembled, itemById } = buildDemoExam(session.seed);
+  const { blueprint, assembled, itemById } = buildDemoExam(
+    session.cert,
+    session.seed,
+  );
   const scored: ScoredItem[] = [];
   const wrongItems: ExamWrongItem[] = [];
   const sectionTitles: Record<string, string> = {};
@@ -188,6 +230,7 @@ export async function submitDemoExam(
   // One-final-submission: clear the session so it can never be re-scored.
   jar.delete(COOKIE);
   logger.info("exam.demo_submitted", {
+    certification: session.cert,
     scoreBp: result.scoreBp,
     passed: result.passed,
     expired,
