@@ -9,6 +9,7 @@ import {
   Home,
   Layers,
   NotebookPen,
+  Target,
   UserRound,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -27,6 +28,7 @@ const SIDEBAR_NAV = [
   APP_NAV[0],
   APP_NAV[1],
   APP_NAV[2],
+  { href: "/app/simulering", label: "Simulering", icon: Target },
   { href: "/app/felbok", label: "Felboken", icon: NotebookPen },
   { href: "/app/kortlekar", label: "Kortlekar", icon: Layers },
   APP_NAV[3],

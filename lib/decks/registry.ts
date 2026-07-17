@@ -12,6 +12,8 @@ export type DeckMeta = {
   title_sv: string;
   access: DeckAccess;
   cardCount: number;
+  /** Certification whose entitlement unlocks a paid deck (§52.3). */
+  certification: string;
 };
 
 export const DECK_META: DeckMeta[] = DECKS.map((d) => ({
@@ -19,6 +21,8 @@ export const DECK_META: DeckMeta[] = DECKS.map((d) => ({
   title_sv: d.title_sv,
   access: d.access as DeckAccess,
   cardCount: d.cards.length,
+  // Every card in a deck shares one certification (see pipeline/decks/data.mjs).
+  certification: d.cards[0]?.certification ?? "forarintyg",
 }));
 
 export function deckMeta(id: string): DeckMeta | undefined {
