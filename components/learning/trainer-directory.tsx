@@ -7,10 +7,17 @@ import {
   CloudSun,
   Compass,
   GraduationCap,
+  LifeBuoy,
   Lightbulb,
+  Moon,
   NotebookPen,
   Radar,
+  Radio,
   Sailboat,
+  Ship,
+  Waves,
+  Wind,
+  Wrench,
   type LucideIcon,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -32,6 +39,14 @@ const ICONS: Record<string, LucideIcon> = {
   Anchor,
   CloudSun,
   Radar,
+  Compass,
+  Moon,
+  Radio,
+  Waves,
+  LifeBuoy,
+  Ship,
+  Wrench,
+  Wind,
 };
 
 function TrainerCard({

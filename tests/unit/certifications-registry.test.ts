@@ -66,7 +66,7 @@ describe("certification registry", () => {
     }
   });
 
-  it("meets the phase-9a per-certification minimums", () => {
+  it("meets the phase-9c per-certification pool minimums", () => {
     const total = (cert: (typeof CERTIFICATION_IDS)[number]) =>
       CERTIFICATIONS[cert].tracks.reduce(
         (n, t) => n + (getTrackItems(cert, t.id)?.length ?? 0),
@@ -74,7 +74,7 @@ describe("certification registry", () => {
       );
     expect(total("forarintyg")).toBeGreaterThanOrEqual(35);
     for (const id of CERTIFICATION_IDS.filter((c) => c !== "forarintyg")) {
-      expect(total(id), id).toBeGreaterThanOrEqual(6);
+      expect(total(id), id).toBeGreaterThanOrEqual(28);
     }
   });
 
