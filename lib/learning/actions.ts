@@ -16,19 +16,22 @@ import { logger } from "@/lib/observability/logger";
  * Learning-loop server actions (SPEC §60.1). Ships the demo/track path
  * (no database) with the same contract as the DB path: the client NEVER
  * receives an answer key before grading (§58.3), and grading is always
- * server-side (§58.2). Items are certification-scoped: the httpOnly
- * certification cookie is the server-side truth for which knowledge base a
- * learner draws from — a client-passed hint is honoured only when no cookie
- * exists (the public free test), where it can at most select among the free
- * public pools.
+ * server-side (§58.2). Items are certification-scoped: an explicit,
+ * Zod-validated certification (set by the server page that rendered the
+ * trainer — in-app from the cookie, publicly from ?intyg=) wins, then the
+ * httpOnly cookie, then Förarintyg. The hint can only ever select among the
+ * demo pools — all of which are publicly reachable via the free test — and
+ * the DB path enforces entitlements per item, so precedence carries no
+ * access risk while keeping the public funnel truthful for visitors who
+ * also carry an app cookie.
  */
 
 async function resolveCert(clientCert?: unknown): Promise<CertificationId> {
+  const fromClient = certIdSchema.safeParse(clientCert);
+  if (fromClient.success) return fromClient.data;
   const jar = await cookies();
   const fromCookie = certIdSchema.safeParse(jar.get(CERT_COOKIE)?.value);
-  if (fromCookie.success) return fromCookie.data;
-  const fromClient = certIdSchema.safeParse(clientCert);
-  return fromClient.success ? fromClient.data : "forarintyg";
+  return fromCookie.success ? fromCookie.data : "forarintyg";
 }
 
 export type AttemptFeedback = {
